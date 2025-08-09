@@ -559,7 +559,11 @@ function renderWorkspace() {
       editBtn.textContent = 'Edit';
       editBtn.style.marginLeft = '16px';
       editBtn.onclick = function() {
-        ensureScenarioHasSteps(selectedJourney, selectedScenario);
+        if (window.enterScenarioEdit) {
+          window.enterScenarioEdit(selectedJourney, selectedScenario);
+          return;
+        }
+        // Fallback if module not loaded
         const steps = (journey.scenarios[selectedScenario].steps || []).map(s => ({ id: s.id, params: { ...s.params } }));
         editingScenario = { journeyIdx: selectedJourney, scenarioIdx: selectedScenario, steps };
         renderAll();
