@@ -701,7 +701,7 @@ function renderWorkspace() {
       let defaultTitle = `Story ${personaJourneys.length + 1}`;
       let title = prompt('Enter a title for this user story:', defaultTitle);
       if (!title || title.trim() === '') title = defaultTitle;
-      // Add journey
+      // Add journey with a default, editable structured scenario
       journeys.push({
         id: generateId(),
         personaId: persona.id,
@@ -709,7 +709,14 @@ function renderWorkspace() {
         benefit,
         title,
         code: `US${journeys.length + 1}`,
-        scenarios: [{ name: 'Scenario 1', scenarioText: '<h3>Scenario 1</h3><p><strong>Given</strong> ...<br><strong>When</strong> ...<br><strong>Then</strong> ...</p>' }]
+        scenarios: [{
+          name: 'Scenario 1',
+          steps: [
+            { id: 'access-page', params: { page: 'dashboard' } },
+            { id: 'enter-text', params: { 'text-value': 'Initial note', 'field-name': 'Notes' } },
+            { id: 'verify-message', params: { 'message-type': 'success', 'message-text': 'Saved' } }
+          ]
+        }]
       });
       saveToLocalStorage();
       actionInput.value = '';
