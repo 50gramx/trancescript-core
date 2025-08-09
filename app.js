@@ -559,7 +559,9 @@ function renderWorkspace() {
       editBtn.textContent = 'Edit';
       editBtn.style.marginLeft = '16px';
       editBtn.onclick = function() {
-        editingScenario = { journeyIdx: selectedJourney, scenarioIdx: selectedScenario, steps: journey.scenarios[selectedScenario].steps.map(s => ({ id: s.id, params: { ...s.params } })) };
+        ensureScenarioHasSteps(selectedJourney, selectedScenario);
+        const steps = (journey.scenarios[selectedScenario].steps || []).map(s => ({ id: s.id, params: { ...s.params } }));
+        editingScenario = { journeyIdx: selectedJourney, scenarioIdx: selectedScenario, steps };
         renderAll();
       };
       scenarioTextDiv.appendChild(editBtn);
@@ -759,6 +761,21 @@ function renderWorkspace() {
       }
     };
   });
+}
+
+// Ensure a scenario has a structured steps array; migrate legacy scenarioText
+function ensureScenarioHasSteps(journeyIdx, scenarioIdx) {
+  const journey = journeys && journeys[journeyIdx];
+  if (!journey || !Array.isArray(journey.scenarios)) return;
+  const scenario = journey.scenarios[scenarioIdx];
+  if (!scenario) return;
+  if (!Array.isArray(scenario.steps)) {
+    scenario.steps = [
+      { id: 'access-page', params: { page: 'dashboard' } }
+    ];
+    if (scenario.scenarioText) delete scenario.scenarioText;
+    try { saveToLocalStorage(); } catch (_) {}
+  }
 }
 
 function renderScenarioSteps(scenario) {
