@@ -295,7 +295,7 @@ window.appData = {
             scenarios: [
                 {
                     id: "start-live-stream",
-                    title: "Start Live Stream",
+            title: "Start Demo Flow",
                     type: "happy-path",
                     steps: [
                         {

@@ -2682,23 +2682,16 @@ function initializeLiveCollaboration() {
     </div>
   `;
   
-  // Insert collaboration bar after the tabs
+  // Insert collaboration bar after the tabs (disabled in OSS core)
   const tabsElement = document.getElementById('tabs');
   if (tabsElement && tabsElement.parentNode) {
-    tabsElement.parentNode.insertBefore(collaborationBar, tabsElement.nextSibling);
+    // tabsElement.parentNode.insertBefore(collaborationBar, tabsElement.nextSibling);
   }
   
-  // Add event listeners
-  document.getElementById('toggleCollaborationBtn').addEventListener('click', toggleLiveCollaboration);
-  document.getElementById('sendChatBtn').addEventListener('click', sendChatMessage);
-  document.getElementById('chatInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      sendChatMessage();
-    }
-  });
+  // Event listeners disabled in OSS core
   
   // Simulate real-time updates
-  setInterval(simulateRealTimeUpdates, 5000);
+  // Disabled in OSS core
 }
 
 function toggleLiveCollaboration() {
@@ -2707,7 +2700,7 @@ function toggleLiveCollaboration() {
   const toggleBtn = document.getElementById('toggleCollaborationBtn');
   const liveChat = document.getElementById('liveChat');
   
-  if (liveCollaborationMode) {
+  if (false && liveCollaborationMode) {
     statusIndicator.textContent = '🟢 Live';
     statusIndicator.className = 'status-indicator live';
     toggleBtn.textContent = 'End Live Session';
@@ -2739,7 +2732,7 @@ function toggleLiveCollaboration() {
 }
 
 function updateParticipantsList() {
-  const participantsList = document.getElementById('participantsList');
+  const participantsList = document.getElementById('participantsList'); // may not exist in OSS core
   const count = collaborationParticipants.length;
   participantsList.innerHTML = `
     <span class="participants-label">Participants: </span>
