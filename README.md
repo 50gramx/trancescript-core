@@ -76,9 +76,7 @@ A lightweight, offline-first user journey and scenario builder. TranceScript Cor
 
 ### Keyboard Shortcuts
 - **Ctrl+S** - Save current scenario
-- **Ctrl+D** - Toggle dark mode
-- **Ctrl+N** - New scenario
-- **Escape** - Cancel editing
+  (Note: global shortcuts are disabled in the OSS core build.)
 
 ## 📊 Data Structure
 

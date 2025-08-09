@@ -1931,12 +1931,7 @@ function toggleDarkMode() {
   const enabled = !document.body.classList.contains('dark-mode');
   setDarkMode(enabled);
 }
-document.addEventListener('keydown', function(e) {
-  if ((e.ctrlKey || e.altKey || e.metaKey) && e.key.toLowerCase() === 'd') {
-    e.preventDefault();
-    toggleDarkMode();
-  }
-});
+// Keyboard shortcuts are disabled in the OSS core build
 (function() {
   const darkPref = localStorage.getItem('prototyperDarkMode');
   if (darkPref === '1') setDarkMode(true);
@@ -1978,41 +1973,13 @@ document.addEventListener('DOMContentLoaded', function() {
     };
   }
   setupMinimizeBtnSettings();
-  // Keyboard shortcut for minimize (Ctrl/Alt/Cmd+M)
-  document.addEventListener('keydown', function(e) {
-    if ((e.ctrlKey || e.altKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'm') {
-      e.preventDefault();
-      toggleSidebarMinimized();
-    }
-  });
+  // Keyboard shortcuts disabled in OSS core
 }); 
 
 // Add global keyboard shortcut handler for dark mode, minimize, export, and import
 // Place after all imports and function definitions
 
-document.addEventListener('keydown', function(e) {
-  if ((e.ctrlKey || e.altKey || e.metaKey) && !e.shiftKey) {
-    if (e.key.toLowerCase() === 'd') {
-      e.preventDefault();
-      if (typeof toggleDarkMode === 'function') toggleDarkMode();
-    } else if (e.key.toLowerCase() === 'm') {
-      e.preventDefault();
-      const sidebar = document.querySelector('.sidebar');
-      if (sidebar) {
-        sidebar.classList.toggle('minimized');
-        renderSidebar();
-      }
-    } else if (e.key.toLowerCase() === 'e') {
-      e.preventDefault();
-      if (typeof exportAppData === 'function') exportAppData();
-    } else if (e.key.toLowerCase() === 'i') {
-      e.preventDefault();
-      // Try to trigger import input
-      const importInput = document.getElementById('importAppDataBtnMain') || document.querySelector('input[type="file"][accept=".json"]');
-      if (importInput) importInput.click();
-    }
-  }
-}); 
+// Global keyboard shortcuts disabled in OSS core
 
 function exportScenarioToJSON(journeyIdx, scenarioIdx) {
   const journey = journeys[journeyIdx];
