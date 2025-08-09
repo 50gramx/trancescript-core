@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pathlight - Build with Confidence</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Note: External fonts removed to ensure offline, zero-network core -->
+  
+  <!-- Optional metrics (Firebase) gated by explicit user consent -->
+  <script>
+    (function () {
+      function loadScript(src, onload) {
+        try {
+          var s = document.createElement('script');
+          s.src = src;
+          s.async = true;
+          if (onload) s.onload = onload;
+          s.onerror = function () { /* swallow errors to remain error-free offline */ };
+          document.head.appendChild(s);
+        } catch (_) { /* no-op */ }
+      }
+
+      function loadFirebaseBundle() {
+        // Load Firebase SDKs, then try local override config, then fallback config
+        loadScript('https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js', function () {
+          loadScript('https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js', function () {
+            // Try local override first (ignored by git), then standard config
+            var triedFallback = false;
+            var onError = function () {
+              if (!triedFallback) {
+                triedFallback = true;
+                loadScript('firebase-config.js');
+              }
+            };
+            try {
+              var s = document.createElement('script');
+              s.src = 'firebase-config.local.js';
+              s.async = true;
+              s.onerror = onError; // if local missing, use fallback
+              s.onload = function () { /* local loaded */ };
+              document.head.appendChild(s);
+            } catch (_) {
+              onError();
+            }
+          });
+        });
+      }
+
+      function setConsent(value) {
+        try { localStorage.setItem('pathlight_metrics_consent', value); } catch (_) {}
+      }
+
+      function getConsent() {
+        try { return localStorage.getItem('pathlight_metrics_consent'); } catch (_) { return null; }
+      }
+
+      function hideBanner(banner) { if (banner && banner.parentNode) banner.parentNode.removeChild(banner); }
+
+      function showConsentBanner() {
+        var banner = document.createElement('div');
+        banner.setAttribute('role', 'dialog');
+        banner.setAttribute('aria-live', 'polite');
+        banner.style.position = 'fixed';
+        banner.style.bottom = '16px';
+        banner.style.left = '16px';
+        banner.style.right = '16px';
+        banner.style.zIndex = '1000';
+        banner.style.background = 'var(--color-surface, #111827)';
+        banner.style.color = 'var(--color-text, #e5e7eb)';
+        banner.style.padding = '12px 16px';
+        banner.style.borderRadius = '8px';
+        banner.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
+        banner.style.display = 'flex';
+        banner.style.alignItems = 'center';
+        banner.style.justifyContent = 'space-between';
+        banner.style.gap = '12px';
+
+        var text = document.createElement('div');
+        text.textContent = 'Allow anonymous usage metrics to improve Pathlight? This is optional and can be changed later.';
+
+        var actions = document.createElement('div');
+        actions.style.display = 'flex';
+        actions.style.gap = '8px';
+
+        var accept = document.createElement('button');
+        accept.textContent = 'Allow';
+        accept.style.padding = '8px 12px';
+        accept.style.borderRadius = '6px';
+        accept.style.border = 'none';
+        accept.style.cursor = 'pointer';
+        accept.style.background = 'var(--color-primary, #3b82f6)';
+        accept.style.color = '#fff';
+        accept.onclick = function () { setConsent('granted'); hideBanner(banner); loadFirebaseBundle(); };
+
+        var decline = document.createElement('button');
+        decline.textContent = 'Skip';
+        decline.style.padding = '8px 12px';
+        decline.style.borderRadius = '6px';
+        decline.style.border = '1px solid var(--color-border, #374151)';
+        decline.style.cursor = 'pointer';
+        decline.style.background = 'transparent';
+        decline.style.color = 'inherit';
+        decline.onclick = function () { setConsent('denied'); hideBanner(banner); };
+
+        actions.appendChild(accept);
+        actions.appendChild(decline);
+        banner.appendChild(text);
+        banner.appendChild(actions);
+        document.addEventListener('DOMContentLoaded', function () { document.body.appendChild(banner); });
+      }
+
+      // Initialize consent flow early
+      var consent = getConsent();
+      if (consent === 'granted') {
+        loadFirebaseBundle();
+      } else if (consent === 'denied') {
+        // no-op
+      } else {
+        showConsentBanner();
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="app-details-section" style="margin-bottom: 10px; position: relative; display: flex; align-items: center;">
+        <div class="app-details-title" id="appDetailsBtn" style="cursor: pointer;"></div>
+        <span id="appKeyDisplay" style="margin-left: 8px; font-weight: bold; color: var(--color-primary); display: none;"></span>
+      </div>
+      <div id="appDataFeedback" class="app-data-feedback" style="display:none;"></div>
+      <div class="personas-row" id="personasRow" style="display: flex; align-items: center; gap: 8px; margin: 0 0 10px 20px;"></div>
+      <div class="sidebar-divider"></div>
+      <h2 style="margin: 0 0 10px 20px;">User Journeys</h2>
+      <div class="sidebar-scroll">
+        <div class="sidebar-section">
+          <ul class="story-list" id="storyList"></ul>
+        </div>
+      </div>
+      <!-- No dark mode toggle in sidebar footer -->
+      <div class="sidebar-footer">
+        <button id="minimizeSidebarBtn" class="icon-btn" title="Minimize sidebar" aria-label="Minimize sidebar" style="background: none; border: none; box-shadow: none;">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+    <!-- Main Workspace -->
+    <div class="main">
+      <div class="tabs" id="tabs"></div>
+      <div class="workspace" id="workspace">
+        <!-- Persona and journey management will be rendered here by JS -->
+        </div>
+      </div>
+    </div>
+  <script src="data.js"></script>
+  <script type="module" src="app.js"></script>
+  <script src="test-suite.js"></script>
+    <!-- Community Impact Metrics -->
+    <div class="community-impact" style="position: fixed; bottom: 20px; right: 20px; background: rgba(0,0,0,0.8); color: white; padding: 15px; border-radius: 10px; font-size: 12px; z-index: 1000;">
+      <h4 style="margin: 0 0 10px 0; color: #7F00FF;">Community Impact</h4>
+      <div id="metrics-display">
+        <div>📊 Scenarios Created: <span id="scenarios-created">-</span></div>
+        <div>🎯 Apps Visualized: <span id="apps-visualized">-</span></div>
+        <div>🚀 Scenarios Shared: <span id="scenarios-shared">-</span></div>
+      </div>
+    </div>
+</body>
+</html> 

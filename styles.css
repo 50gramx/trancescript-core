@@ -1,0 +1,1460 @@
+/* CSS moved from HTML file */
+:root {
+  --color-bg: #f6f7eb;
+  --color-sidebar: #f3f3f3;
+  --color-card: #f3f3f3;
+  --color-primary: #e94f37;
+  --color-accent: #e94f37;
+  --color-accent2: #e94f37;
+  --color-error: #e94f37;
+  --color-text: #393e41;
+  --color-text-light: #fff;
+  --color-text-secondary: #6b7280;
+  --color-sidebar-border: #393e41;
+  --color-primary-dark: #e94f37;
+  --color-divider: #e0e0e0;
+  --color-bg-alt: #f6f7eb;
+  --color-card-border: #e0e0e0;
+  --color-focus: #e94f37;
+}
+.dark-mode {
+  --color-bg: #393e41;
+  --color-sidebar: #393e41;
+  --color-card: #393e41;
+  --color-primary: #e94f37;
+  --color-accent: #e94f37;
+  --color-accent2: #e94f37;
+  --color-error: #e94f37;
+  --color-text: #f6f7eb;
+  --color-text-light: #f6f7eb;
+  --color-text-secondary: #9ca3af;
+  --color-sidebar-border: #393e41;
+  --color-divider: #44474a;
+  --color-bg-alt: #393e41;
+  --color-card-border: #44474a;
+  --color-focus: #e94f37;
+}
+body {
+  /* Use system fonts to avoid external font downloads for offline support */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  background: var(--color-bg);
+}
+.sidebar {
+  width: 280px;
+  min-width: 220px;
+  max-width: 320px;
+  flex: 0 0 280px;
+  background: var(--color-sidebar);
+  border-right: 1px solid var(--color-sidebar-border);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100vh;
+  transition: width 0.2s;
+}
+.sidebar.minimized {
+  width: 48px !important;
+  min-width: 48px !important;
+  max-width: 48px !important;
+  flex: 0 0 48px !important;
+}
+.sidebar.minimized .app-details-title,
+.sidebar.minimized h2,
+.sidebar.minimized .app-details-section span,
+.sidebar.minimized .app-data-feedback {
+  display: none !important;
+}
+/* In minimized mode, center the code in story-list li */
+.sidebar.minimized .story-list li {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.08em;
+  padding-left: 0;
+  padding-right: 0;
+}
+.sidebar.minimized .icon-btn {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+#minimizeSidebarBtn {
+  transition: background 0.2s, color 0.2s;
+}
+#minimizeSidebarBtn:hover, #minimizeSidebarBtn:focus {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+}
+.sidebar h2, .sidebar h3 {
+  color: var(--color-primary);
+}
+.sidebar h3 {
+  margin-top: 18px;
+  font-size: 1em;
+  color: var(--color-primary);
+}
+.sidebar-section {
+  margin-bottom: 18px;
+}
+.sidebar-divider {
+  border-top: 1px solid var(--color-divider);
+  margin: 16px 0 10px 0;
+}
+.sidebar-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.story-list, .persona-list, .profile-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.story-list li, .persona-list li, .profile-list li {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-left: 4px solid transparent;
+  transition: background 0.2s;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 36px;
+  color: var(--color-text);
+}
+.story-list li.selected, .persona-list li.selected, .profile-list li.selected {
+  background: var(--color-primary, #e0e7ff);
+  border-left: 4px solid var(--color-primary);
+  font-weight: bold;
+  color: var(--color-text-light);
+}
+.story-list .full-story {
+  font-size: 0.99em;
+  color: var(--color-text);
+  white-space: pre-line;
+  line-height: 1.4;
+  margin-right: 8px;
+  font-weight: 400;
+  padding: 2px 0 2px 0;
+  word-break: break-word;
+}
+.persona-list li.selected {
+  background: var(--color-bg-alt);
+  border-left: 4px solid var(--color-primary);
+  font-weight: bold;
+}
+.persona-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-card);
+  display: inline-block;
+  margin-right: 10px;
+  object-fit: cover;
+  vertical-align: middle;
+}
+.persona-name {
+  flex: 1;
+  align-self: center;
+  font-size: 1em;
+  color: var(--color-text);
+  font-weight: 500;
+}
+.add-btn, .add-profile-btn {
+  margin: 10px 20px 0 20px;
+  padding: 8px 0;
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: 6px;
+  font-size: 0.98em;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: background 0.2s;
+  outline: none;
+  width: calc(100% - 40px);
+}
+.add-btn:hover, .add-profile-btn:hover {
+  background: var(--color-accent);
+}
+.app-details-section {
+  background: var(--color-bg-alt);
+  border-top: 1px solid var(--color-divider);
+  padding: 16px 0 0 0;
+}
+.app-details-title {
+  font-size: 1.08em;
+  font-weight: bold;
+  color: var(--color-text);
+  margin: 0 0 6px 20px;
+  cursor: pointer;
+}
+.profile-list li.selected {
+  background: var(--color-primary);
+  border-left: 4px solid var(--color-primary);
+  font-weight: bold;
+  color: var(--color-text-light);
+}
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  min-width: 0;
+  color: var(--color-text);
+}
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--color-divider);
+  background: var(--color-bg-alt);
+}
+.tab {
+  padding: 12px 24px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: background 0.2s;
+}
+.tab.active {
+  border-bottom: 2px solid var(--color-primary);
+  background: var(--color-bg);
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.add-scenario-tab {
+  background-color: var(--color-card-border);
+  color: var(--color-text);
+  font-weight: bold;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+.add-scenario-tab:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+.workspace {
+  display: block;
+  padding: 24px;
+  min-width: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.scenario-text {
+  background: var(--color-bg-alt) !important;
+  color: var(--color-text) !important;
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.dark-mode .scenario-text {
+  background: var(--color-card) !important;
+  color: var(--color-text) !important;
+}
+/* Persona editor */
+.persona-editor {
+  background: var(--color-card);
+  border-radius: 8px;
+  padding: 28px 32px 24px 32px;
+  margin: 0 auto;
+  max-width: 520px;
+  min-width: 320px;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.06);
+  border: 1px solid var(--color-card-border);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--color-text);
+}
+.persona-editor label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: block;
+}
+.persona-editor input[type="text"], .persona-editor textarea, .persona-editor select,
+.app-editor input[type="text"], .app-editor textarea, .app-editor select {
+  width: 100%;
+  padding: 8px;
+  font-size: 1em;
+  border: 1px solid var(--color-card-border);
+  border-radius: 5px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  background: var(--color-card);
+  color: var(--color-text);
+}
+.persona-editor textarea {
+  min-height: 48px;
+  resize: vertical;
+}
+.persona-editor .avatar-preview {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #e0e7ff;
+  object-fit: cover;
+  margin-bottom: 8px;
+}
+.persona-editor .save-btn, .app-editor .save-btn {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 10px 0;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.persona-editor .save-btn:hover, .app-editor .save-btn:hover {
+  background: var(--color-accent);
+}
+/* App details editor */
+.app-editor {
+  background: var(--color-card);
+  border-radius: 8px;
+  padding: 28px 32px 24px 32px;
+  margin: 0 auto;
+  max-width: 520px;
+  min-width: 320px;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.06);
+  border: 1px solid var(--color-card-border);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--color-text);
+}
+.app-editor label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: block;
+}
+.app-editor input[type="text"]::placeholder, .app-editor textarea::placeholder, .persona-editor input[type="text"]::placeholder, .persona-editor textarea::placeholder {
+  color: var(--color-divider);
+  opacity: 1;
+}
+.app-editor textarea {
+  min-height: 48px;
+  resize: vertical;
+}
+.app-editor .save-btn {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 10px 0;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.app-editor .save-btn:hover {
+  background: var(--color-accent);
+}
+.profile-list li {
+  font-size: 0.97em;
+  color: var(--color-text);
+  padding-left: 32px;
+  border-left: 0;
+  background: none;
+  font-weight: 400;
+}
+.profile-list li.selected {
+  background: var(--color-primary, #e0e7ff);
+  font-weight: bold;
+  color: var(--color-text-light);
+}
+.add-profile-btn {
+  margin: 8px 20px 0 20px;
+  padding: 7px 0;
+  font-size: 0.97em;
+  background: var(--color-primary);
+  color: var(--color-text-light);
+}
+.add-profile-btn:hover {
+  background: var(--color-accent);
+}
+/* Modal styles for add persona/profile */
+.modal-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.18);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dark-mode .modal-bg {
+  background: rgba(0,0,0,0.55);
+}
+.modal {
+  background: var(--color-card);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  padding: 32px 28px 24px 28px;
+  min-width: 340px;
+  max-width: 95vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: fadeIn 0.2s;
+  color: var(--color-text);
+  border: 1px solid var(--color-card-border);
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.modal h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.15em;
+  font-weight: bold;
+}
+.modal label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: block;
+}
+.modal input[type="text"], .modal textarea, .modal select {
+  width: 100%;
+  padding: 8px;
+  font-size: 1em;
+  border: 1px solid var(--color-card-border);
+  border-radius: 5px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.modal textarea {
+  min-height: 48px;
+  resize: vertical;
+}
+.modal .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+.modal button {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.modal button.cancel-btn {
+  background: var(--color-card);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+.modal button.cancel-btn:hover {
+  background: var(--color-bg-alt);
+}
+
+.scenario-editor .cancel-btn {
+  background: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.scenario-editor .cancel-btn:hover {
+  background: #4b5563;
+}
+
+.scenario-editor .duplicate-btn {
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.scenario-editor .duplicate-btn:hover {
+  background: #7c3aed;
+}
+.modal .add-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Add Scenario Modal specific styles */
+.modal h3 {
+  color: var(--color-text);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.modal label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.modal input[type="text"], .modal textarea, .modal select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--color-card-border);
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--color-card);
+  color: var(--color-text);
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+.modal textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.modal select {
+  cursor: pointer;
+}
+.modal .error {
+  color: var(--color-error);
+  font-size: 0.97em;
+  margin-bottom: 8px;
+} 
+/* App details actions (Save/Import) */
+.app-details-section:hover .app-details-actions {
+  display: flex !important;
+}
+.icon-btn {
+  background: var(--color-sidebar);
+  border: 1px solid var(--color-sidebar-border);
+  border-radius: 5px;
+  padding: 4px 7px;
+  font-size: 1.1em;
+  cursor: pointer;
+  color: var(--color-primary);
+  transition: background 0.2s, border 0.2s;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+.icon-btn:hover {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  border: 1px solid var(--color-primary);
+}
+.app-data-feedback {
+  margin: 8px 20px 0 20px;
+  font-size: 0.98em;
+  color: var(--color-text-light);
+  background: var(--color-primary);
+  border-radius: 5px;
+  padding: 6px 12px;
+  display: inline-block;
+  min-width: 120px;
+  max-width: 220px;
+  box-shadow: 0 2px 6px rgba(99,102,241,0.08);
+  z-index: 10;
+}
+.app-data-feedback.error {
+  background: var(--color-error);
+} 
+/* --- Persona Card Styles --- */
+.persona-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 0;
+}
+.persona-card {
+  background: var(--color-card);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.06);
+  border: 1px solid var(--color-card-border);
+  padding: 24px 32px 18px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+.persona-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.persona-name-input {
+  font-size: 1.1em;
+  font-weight: bold;
+  flex: 1;
+  border: 1px solid var(--color-card-border);
+  border-radius: 5px;
+  padding: 6px 8px;
+  color: var(--color-text);
+  background: var(--color-card);
+}
+.persona-profile-select {
+  border: 1px solid var(--color-card-border);
+  border-radius: 5px;
+  padding: 6px 8px;
+  font-size: 1em;
+  background: var(--color-card);
+  color: var(--color-text);
+}
+.persona-delete-btn {
+  background: none;
+  border: none;
+  color: var(--color-error);
+  font-size: 1.2em;
+  cursor: pointer;
+  margin-left: 8px;
+}
+.persona-save-btn {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 8px 0;
+  margin-top: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 120px;
+  align-self: flex-end;
+}
+.persona-save-btn:hover {
+  background: var(--color-accent);
+}
+.add-persona-card {
+  background: var(--color-bg-alt);
+  border: 1px dashed var(--color-card-border);
+  color: var(--color-text);
+  opacity: 0.95;
+}
+.add-persona-btn {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 8px 0;
+  margin-top: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 120px;
+  align-self: flex-end;
+}
+.add-persona-btn:hover {
+  background: var(--color-accent);
+}
+.persona-bio-input, .persona-goals-input, .persona-frustrations-input, .persona-avatar-input, .add-persona-bio, .add-persona-goals, .add-persona-frustrations, .add-persona-avatar {
+  width: 100%;
+  padding: 8px;
+  font-size: 1em;
+  border: 1px solid var(--color-card-border);
+  border-radius: 5px;
+  margin-bottom: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+  background: var(--color-card);
+  color: var(--color-text);
+}
+/* --- Journey List Styles --- */
+.persona-journeys-section {
+  margin-top: 12px;
+  background: var(--color-bg-alt);
+  border-radius: 8px;
+  padding: 12px 16px 10px 16px;
+  border: 1px solid var(--color-card-border);
+}
+.persona-journeys-title {
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--color-primary);
+}
+.persona-journey-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px 0;
+}
+.persona-journey-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-divider);
+  font-size: 1em;
+  color: var(--color-text);
+}
+.persona-journey-list li:last-child {
+  border-bottom: none;
+}
+.journey-title {
+  flex: 1;
+  color: var(--color-text);
+}
+.edit-journey-btn, .delete-journey-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 1.1em;
+  cursor: pointer;
+  margin-left: 2px;
+}
+.delete-journey-btn {
+  color: var(--color-error);
+}
+.no-journeys {
+  color: var(--color-divider);
+  font-style: italic;
+  padding: 4px 0;
+}
+.add-journey-inline {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 6px;
+}
+.add-journey-action, .add-journey-benefit {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid var(--color-card-border);
+  border-radius: 5px;
+  font-size: 1em;
+  background: var(--color-card);
+  color: var(--color-text);
+}
+.add-journey-btn {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.add-journey-btn:hover {
+  background: var(--color-accent);
+}
+/* --- Sidebar and App Details --- */
+.sidebar {
+  background: var(--color-sidebar);
+  border-right: 1px solid var(--color-sidebar-border);
+}
+.app-details-section {
+  background: var(--color-bg-alt);
+  border-top: 1px solid var(--color-divider);
+  padding: 16px 0 0 0;
+}
+.app-details-actions .icon-btn {
+  background: var(--color-sidebar);
+  color: var(--color-primary);
+  border: 1px solid var(--color-sidebar-border);
+}
+.app-details-actions .icon-btn:hover {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+  border: 1px solid var(--color-primary);
+}
+/* --- Controls Section --- */
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px 0 8px 0;
+  display: flex;
+  justify-content: center;
+  background: var(--color-sidebar);
+  border-top: 1px solid var(--color-divider);
+}
+#darkModeToggle {
+  border-radius: 50%;
+  padding: 6px;
+  background: var(--color-sidebar);
+  color: var(--color-primary);
+  border: 1px solid var(--color-sidebar-border);
+  transition: background 0.2s, color 0.2s;
+}
+#darkModeToggle:hover {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+}
+#moonIcon, #sunIcon {
+  vertical-align: middle;
+} 
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .persona-container {
+    max-width: 98vw;
+    padding: 12px 0;
+  }
+  .persona-card, .add-persona-card {
+    padding: 16px 8px 12px 8px;
+  }
+}
+.persona-bio-left, .persona-bio-right {
+  background: transparent;
+  color: var(--color-text);
+}
+.persona-bio-avatar, .persona-bio-avatar-initial {
+  background: var(--color-primary) !important;
+  color: var(--color-text-light) !important;
+}
+.persona-bio-profile {
+  color: var(--color-primary) !important;
+} 
+.persona-bio {
+  background: var(--color-card);
+  border: 1px solid var(--color-card-border);
+  color: var(--color-text);
+}
+.persona-bio-name {
+  color: var(--color-text);
+}
+.persona-bio-right {
+  color: var(--color-text);
+}
+.persona-bio-right strong {
+  color: var(--color-text);
+} 
+.persona-bio,
+.persona-bio * {
+  background: transparent !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-card-border) !important;
+}
+.persona-bio-avatar, .persona-bio-avatar-initial {
+  background: var(--color-primary) !important;
+  color: var(--color-text-light) !important;
+}
+.persona-bio-profile {
+  color: var(--color-primary) !important;
+} 
+.persona-avatar-btn {
+  border: 2px solid var(--color-primary) !important;
+  color: var(--color-primary) !important;
+  background: var(--color-card);
+}
+.persona-avatar-btn:hover {
+  background: var(--color-accent);
+  color: var(--color-text-light);
+  border-color: var(--color-accent);
+}
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 2px var(--color-focus);
+} 
+.sidebar.minimized #appKeyDisplay {
+  display: inline-block !important;
+  background: var(--color-card);
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  border-radius: 7px;
+  padding: 4px 12px;
+  font-size: 1.08em;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin: 0 auto;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.sidebar.minimized #appKeyDisplay:hover {
+  background: var(--color-primary);
+  color: var(--color-text-light);
+} 
+.app-settings-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 32px auto 0 auto;
+  border-bottom: 1.5px solid var(--color-divider);
+  max-width: 480px;
+}
+.app-settings-tab-btn {
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 1.08em;
+  font-weight: 500;
+  color: var(--color-text);
+  padding: 10px 22px 8px 22px;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  position: relative;
+}
+.app-settings-tab-btn.selected {
+  background: var(--color-card);
+  color: var(--color-primary);
+  border-bottom: 2.5px solid var(--color-primary);
+  font-weight: 700;
+  z-index: 2;
+}
+.app-settings-tab-btn:not(.selected):hover {
+  background: var(--color-bg-alt);
+  color: var(--color-primary);
+}
+.app-settings-tab-content {
+  background: var(--color-card);
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  max-width: 480px;
+  margin: 0 auto 32px auto;
+  padding: 32px 32px 24px 32px;
+  min-height: 120px;
+}
+@media (max-width: 600px) {
+  .app-settings-tabs, .app-settings-tab-content {
+    max-width: 98vw;
+    padding-left: 6vw;
+    padding-right: 6vw;
+  }
+} 
+/* Add this at the end to override max-width for Personas tab */
+.app-settings-tab-content.personas-tab {
+  max-width: none !important;
+  width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box;
+}
+@media (max-width: 900px) {
+  .app-settings-tab-content.personas-tab {
+    max-width: 100vw !important;
+    width: 100vw !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+} 
+/* Enhanced Step Builder Styles */
+.scenario-editor {
+  background: var(--color-card);
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid var(--color-card-border);
+}
+
+.step-list {
+  margin-bottom: 20px;
+}
+
+.step-item {
+  border: 1px solid var(--color-card-border);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  background: var(--color-card);
+  transition: all 0.2s ease;
+}
+
+.step-item:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.step-item button {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+.step-item button:hover {
+  background: var(--color-accent);
+}
+
+.step-item button[style*="background: var(--color-error)"] {
+  background: var(--color-error) !important;
+}
+
+.step-item button[style*="background: var(--color-error)"]:hover {
+  background: #d32f2f !important;
+}
+
+.step-item select,
+.step-item input[type="text"],
+.step-item input[type="number"] {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid var(--color-card-border);
+  border-radius: 4px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.step-item select:focus,
+.step-item input[type="text"]:focus,
+.step-item input[type="number"]:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.step-item input[type="checkbox"] {
+  margin-left: 0;
+  transform: scale(1.2);
+}
+
+.step-item label {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.step-preview {
+  margin-top: 10px;
+  padding: 8px;
+  background: var(--color-bg-alt);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.add-step-area {
+  text-align: center;
+  padding: 20px;
+  border: 2px dashed var(--color-card-border);
+  border-radius: 8px;
+  background: var(--color-bg-alt);
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
+}
+
+.add-step-area:hover {
+  border-color: var(--color-primary);
+  background: var(--color-card);
+}
+
+.add-step-area button {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-step-area button:hover {
+  background: var(--color-accent);
+}
+
+.live-preview-header {
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: var(--color-text);
+  font-size: 18px;
+  font-weight: 600;
+} 
+/* Color-coded Step Types (Like Syntax Highlighting) */
+.step-item.given-step {
+  border-left: 4px solid #10b981; /* Green for Given */
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.05) 0%, var(--color-card) 100%);
+}
+
+.step-item.when-step {
+  border-left: 4px solid #3b82f6; /* Blue for When */
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.05) 0%, var(--color-card) 100%);
+}
+
+.step-item.then-step {
+  border-left: 4px solid #f59e0b; /* Orange for Then */
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.05) 0%, var(--color-card) 100%);
+}
+
+.step-item.and-step {
+  border-left: 4px solid #8b5cf6; /* Purple for And */
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.05) 0%, var(--color-card) 100%);
+}
+
+.step-item.but-step {
+  border-left: 4px solid #ef4444; /* Red for But */
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.05) 0%, var(--color-card) 100%);
+}
+
+/* Step Type Badges */
+.step-type-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 8px;
+}
+
+.step-type-badge.given {
+  background: #10b981;
+  color: white;
+}
+
+.step-type-badge.when {
+  background: #3b82f6;
+  color: white;
+}
+
+.step-type-badge.then {
+  background: #f59e0b;
+  color: white;
+}
+
+.step-type-badge.and {
+  background: #8b5cf6;
+  color: white;
+}
+
+.step-type-badge.but {
+  background: #ef4444;
+  color: white;
+}
+
+/* Enhanced Step Preview with Syntax Highlighting */
+.step-preview {
+  margin-top: 10px;
+  padding: 12px;
+  background: var(--color-bg-alt);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  border-left: 3px solid var(--color-primary);
+  position: relative;
+}
+
+.step-preview::before {
+  content: attr(data-step-type);
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  background: var(--color-primary);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Parameter Highlighting */
+.parameter-highlight {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.page-parameter {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.string-parameter {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.number-parameter {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+
+.boolean-parameter {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+} 
+/* Scenario Steps Display with Color Coding */
+.scenario-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scenario-step-item {
+  border: 1px solid var(--color-card-border);
+  border-radius: 8px;
+  padding: 15px;
+  background: var(--color-card);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.scenario-step-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.scenario-step-item.given-step {
+  border-left: 4px solid #10b981;
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.05) 0%, var(--color-card) 100%);
+}
+
+.scenario-step-item.when-step {
+  border-left: 4px solid #3b82f6;
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.05) 0%, var(--color-card) 100%);
+}
+
+.scenario-step-item.then-step {
+  border-left: 4px solid #f59e0b;
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.05) 0%, var(--color-card) 100%);
+}
+
+.scenario-step-item.and-step {
+  border-left: 4px solid #8b5cf6;
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.05) 0%, var(--color-card) 100%);
+}
+
+.scenario-step-item.but-step {
+  border-left: 4px solid #ef4444;
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.05) 0%, var(--color-card) 100%);
+}
+
+.scenario-step-item.unknown-step {
+  border-left: 4px solid #6b7280;
+  background: linear-gradient(90deg, rgba(107, 114, 128, 0.05) 0%, var(--color-card) 100%);
+}
+
+/* Step Comments and Dependencies in Scenario View */
+.step-comments {
+  margin-top: 8px;
+  padding: 8px;
+  background: var(--color-bg-alt);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  border-left: 3px solid var(--color-primary);
+}
+
+.step-dependencies {
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 4px;
+  font-size: 14px;
+  color: #8b5cf6;
+  border-left: 3px solid #8b5cf6;
+}
+
+/* Enhanced Parameter Highlighting for Scenario View */
+.scenario-step-item .parameter-highlight {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.scenario-step-item .page-parameter {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.scenario-step-item .string-parameter {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.scenario-step-item .number-parameter {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+
+.scenario-step-item .boolean-parameter {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+} 
+/* Parameter Tooltips */
+.parameter-tooltip {
+  cursor: help;
+  position: relative;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.parameter-tooltip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.parameter-tooltip-popup {
+  background: var(--color-card);
+  border: 1px solid var(--color-card-border);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  max-width: 300px;
+  font-size: 14px;
+  line-height: 1.4;
+  animation: tooltipFadeIn 0.2s ease-out;
+  backdrop-filter: blur(10px);
+  position: fixed;
+  z-index: 99999;
+  pointer-events: none;
+  opacity: 1;
+  visibility: visible;
+}
+
+.parameter-tooltip-popup::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 20px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid var(--color-card);
+}
+
+.tooltip-content {
+  color: var(--color-text);
+}
+
+.tooltip-header {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-card-border);
+  color: var(--color-primary);
+}
+
+.tooltip-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tooltip-details div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tooltip-details strong {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  min-width: 80px;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced parameter highlighting with hover effects */
+.parameter-highlight {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.parameter-highlight:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Page parameter specific hover effect */
+.page-parameter:hover {
+  background: rgba(16, 185, 129, 0.2) !important;
+  color: #10b981 !important;
+}
+
+/* String parameter specific hover effect */
+.string-parameter:hover {
+  background: rgba(245, 158, 11, 0.2) !important;
+  color: #f59e0b !important;
+}
+
+/* Number parameter specific hover effect */
+.number-parameter:hover {
+  background: rgba(139, 92, 246, 0.2) !important;
+  color: #8b5cf6 !important;
+}
+
+/* Boolean parameter specific hover effect */
+.boolean-parameter:hover {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #ef4444 !important;
+} 
+/* Step Type Tooltips */
+.step-type-badge {
+  cursor: help;
+  transition: all 0.2s ease;
+}
+
+.step-type-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.step-type-tooltip-popup {
+  background: var(--color-card);
+  border: 1px solid var(--color-card-border);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  max-width: 280px;
+  font-size: 14px;
+  line-height: 1.4;
+  animation: tooltipFadeIn 0.2s ease-out;
+  backdrop-filter: blur(10px);
+}
+
+.step-type-tooltip-popup::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 20px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid var(--color-card);
+} 
