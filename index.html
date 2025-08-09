@@ -34,16 +34,16 @@
                 loadScript('firebase-config.js');
               }
             };
-            try {
-              var s = document.createElement('script');
-              s.src = 'firebase-config.local.js';
-              s.async = true;
-              s.onerror = onError; // if local missing, use fallback
-              s.onload = function () { /* local loaded */ };
-              document.head.appendChild(s);
-            } catch (_) {
-              onError();
-            }
+            // Try local override only if present; fallback otherwise
+            fetch('firebase-config.local.js', { method: 'HEAD' })
+              .then(function (res) {
+                if (res.ok) {
+                  loadScript('firebase-config.local.js');
+                } else {
+                  onError();
+                }
+              })
+              .catch(onError);
           });
         });
       }
