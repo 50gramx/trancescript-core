@@ -1,13 +1,13 @@
-# Pathlight Metrics Setup Guide
+# TranceScript Metrics Setup Guide
 
 ## Overview
-This guide will help you set up the zero-cost Firebase metrics system for Pathlight to track community impact.
+This guide will help you set up the zero-cost Firebase metrics system for TranceScript to track community impact.
 
 ## Step 1: Create Firebase Project
 
 1. Go to [Firebase Console](https://console.firebase.google.com/)
 2. Click "Create a project"
-3. Name it: `pathlight-metrics`
+3. Name it: `trancescript-metrics`
 4. Choose "Spark Plan" (free tier)
 5. Complete the setup
 
@@ -16,7 +16,7 @@ This guide will help you set up the zero-cost Firebase metrics system for Pathli
 1. In Firebase Console, go to Project Settings
 2. Scroll down to "Your apps" section
 3. Click "Add app" → Web app
-4. Name it: `pathlight-app`
+4. Name it: `trancescript-app`
 5. Copy the config object
 
 ## Step 3: Provide Local Configuration (Do Not Commit)
@@ -25,7 +25,7 @@ Create a file named `firebase-config.local.js` in `trancescript-core/` (this fil
 
 ```html
 <script>
-  window.PATHLIGHT_FIREBASE_CONFIG = {
+  window.TRANCESCRIPT_FIREBASE_CONFIG = {
     apiKey: "YOUR_API_KEY",
     authDomain: "your-project.firebaseapp.com",
     projectId: "your-project-id",
@@ -40,7 +40,7 @@ Create a file named `firebase-config.local.js` in `trancescript-core/` (this fil
 Alternatively for local testing, you can paste the JSON into LocalStorage:
 
 ```js
-localStorage.setItem('PATHLIGHT_FIREBASE_CONFIG_JSON', JSON.stringify({
+localStorage.setItem('TRANCESCRIPT_FIREBASE_CONFIG_JSON', JSON.stringify({
   apiKey: "YOUR_API_KEY",
   authDomain: "your-project.firebaseapp.com",
   projectId: "your-project-id",
@@ -121,4 +121,4 @@ service cloud.firestore {
 4. Deploy to GitHub Pages
 5. Monitor community growth!
 
-The metrics will help demonstrate Pathlight's impact and build community confidence. 
+The metrics will help demonstrate TranceScript's impact and build community confidence.

@@ -936,8 +936,8 @@ function showAddScenarioModal(journeyIdx) {
 
 function addNewScenario(journeyIdx, title, description, type, template) {
   // Track scenario creation for metrics
-  if (window.pathlightMetrics) {
-    window.pathlightMetrics.trackScenarioCreated();
+  if (window.trancescriptMetrics) {
+    window.trancescriptMetrics.trackScenarioCreated();
   }
   const journey = journeys[journeyIdx];
   const newScenarioId = `scenario${journey.scenarios.length + 1}`;
@@ -2088,8 +2088,8 @@ function importScenarioFromJSON(journeyIdx) {
 
 function exportAllScenarios() {
   // Track scenario sharing for metrics
-  if (window.pathlightMetrics) {
-    window.pathlightMetrics.trackScenarioShared();
+  if (window.trancescriptMetrics) {
+    window.trancescriptMetrics.trackScenarioShared();
   }
   const exportData = {
     appDetails: appDetails,
@@ -2851,8 +2851,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // Load and display community metrics
 async function loadAndDisplayMetrics() {
   try {
-    if (window.pathlightMetrics) {
-      const metrics = await window.pathlightMetrics.getMetrics();
+  if (window.trancescriptMetrics) {
+    const metrics = await window.trancescriptMetrics.getMetrics();
       
       // Update the display
       document.getElementById("scenarios-created").textContent = metrics.scenarios_created || 0;
@@ -2867,8 +2867,8 @@ async function loadAndDisplayMetrics() {
 // Load metrics when page loads
 document.addEventListener("DOMContentLoaded", function() {
   // Track app visualization for metrics
-  if (window.pathlightMetrics) {
-    window.pathlightMetrics.trackAppVisualized();
+  if (window.trancescriptMetrics) {
+    window.trancescriptMetrics.trackAppVisualized();
   }
   loadAndDisplayMetrics();
   

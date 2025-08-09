@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2024-01-XX
 
 ### Added
-- Initial release of Pathlight Core
+- Initial release of TranceScript Core
 - User journey management
 - Scenario building tools
 - Step library integration
@@ -48,4 +48,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-For more information about changes, see our [GitHub releases](https://github.com/pathlight/journey-builder/releases).
+For more information about changes, see our GitHub releases.

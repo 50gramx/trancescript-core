@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pathlight - Build with Confidence</title>
+  <title>TranceScript - Build with Confidence</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
   <link rel="stylesheet" href="styles.css">
   <!-- Note: External fonts removed to ensure offline, zero-network core -->
@@ -49,11 +49,11 @@
       }
 
       function setConsent(value) {
-        try { localStorage.setItem('pathlight_metrics_consent', value); } catch (_) {}
+        try { localStorage.setItem('trancescript_metrics_consent', value); } catch (_) {}
       }
 
       function getConsent() {
-        try { return localStorage.getItem('pathlight_metrics_consent'); } catch (_) { return null; }
+        try { return localStorage.getItem('trancescript_metrics_consent'); } catch (_) { return null; }
       }
 
       function hideBanner(banner) { if (banner && banner.parentNode) banner.parentNode.removeChild(banner); }
@@ -78,7 +78,7 @@
         banner.style.gap = '12px';
 
         var text = document.createElement('div');
-        text.textContent = 'Allow anonymous usage metrics to improve Pathlight? This is optional and can be changed later.';
+        text.textContent = 'Allow anonymous usage metrics to improve TranceScript? This is optional and can be changed later.';
 
         var actions = document.createElement('div');
         actions.style.display = 'flex';

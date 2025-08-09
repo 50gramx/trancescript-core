@@ -1,6 +1,6 @@
-# Contributing to Pathlight
+# Contributing to TranceScript Core
 
-Thank you for your interest in contributing to Pathlight! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing to TranceScript Core! This document provides guidelines for contributing to the project.
 
 ## 🎯 How to Contribute
 
@@ -84,4 +84,4 @@ Contributors will be recognized in:
 - **GitHub Discussions**: For questions and ideas
 - **Documentation**: Check the docs/ folder
 
-Thank you for contributing to Pathlight! 🚀
+Thank you for contributing to TranceScript! 🚀

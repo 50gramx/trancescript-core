@@ -1,15 +1,15 @@
-// Firebase Configuration for Pathlight Metrics
+// Firebase Configuration for TranceScript Metrics
 // This file handles anonymous, aggregate metrics tracking for community impact
 
 // Resolve Firebase configuration from safe sources (no hardcoded secrets)
 function resolveFirebaseConfig() {
   // 1) Window-injected config (e.g., from a non-committed local file)
-  if (typeof window !== 'undefined' && window.PATHLIGHT_FIREBASE_CONFIG) {
-    return window.PATHLIGHT_FIREBASE_CONFIG;
+  if (typeof window !== 'undefined' && window.TRANCESCRIPT_FIREBASE_CONFIG) {
+    return window.TRANCESCRIPT_FIREBASE_CONFIG;
   }
   // 2) LocalStorage for development overrides
   try {
-    var stored = localStorage.getItem('PATHLIGHT_FIREBASE_CONFIG_JSON');
+    var stored = localStorage.getItem('TRANCESCRIPT_FIREBASE_CONFIG_JSON');
     if (stored) {
       return JSON.parse(stored);
     }
@@ -32,7 +32,7 @@ if (typeof firebase === 'undefined' || !firebaseConfig) {
   const db = firebase.firestore();
   
   // Global metrics tracking
-  window.pathlightMetrics = {
+  window.trancescriptMetrics = {
     // Increment a metric counter
     incrementMetric: async function(metricName) {
       try {
@@ -95,12 +95,12 @@ if (typeof firebase === 'undefined' || !firebaseConfig) {
     }
   };
   
-  console.log('Pathlight metrics initialized');
+  console.log('TranceScript metrics initialized');
 }
 
 // Fallback if Firebase is not available
-if (typeof window.pathlightMetrics === 'undefined') {
-  window.pathlightMetrics = {
+if (typeof window.trancescriptMetrics === 'undefined') {
+  window.trancescriptMetrics = {
     incrementMetric: function() { console.log('Metrics disabled - Firebase not available'); },
     trackScenarioCreated: function() { console.log('Scenario created (metrics disabled)'); },
     trackAppVisualized: function() { console.log('App visualized (metrics disabled)'); },
