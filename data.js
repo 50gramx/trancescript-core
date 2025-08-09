@@ -94,99 +94,99 @@ window.appData = {
     ],
     journeys: [
         {
-            id: "video-upload-journey",
-            title: "Video Upload Journey",
-            persona: "sarah-creator",
-            story: "As a content creator, I want to upload videos easily so that I can share my content with my audience quickly and efficiently.",
-            benefit: "This will save me time and allow me to focus on creating more content.",
+            id: "task-completion-journey",
+            title: "Task Completion Journey",
+            persona: "primary-user",
+            story: "As a user, I want to create and complete a task efficiently so that I can be more productive.",
+            benefit: "This will save me time and improve my workflow.",
             scenarios: [
                 {
-                    id: "happy-path-upload",
-                    title: "Happy Path - Video Upload",
+                    id: "happy-path-create-task",
+                    title: "Happy Path - Create Task",
                     type: "happy-path",
                     steps: [
                         {
                             id: "access-page",
-                            params: { page: "creator-dashboard" }
+                            params: { page: "dashboard" }
                         },
                         {
                             id: "click-button",
-                            params: { "button-text": "Upload Video" }
+                            params: { "button-text": "New Task" }
                         },
                         {
                             id: "upload-file",
-                            params: { "file-type": "MP4", "file-name": "tutorial-video.mp4" }
+                            params: { "file-type": "TXT", "file-name": "requirements.txt" }
                         },
                         {
                             id: "enter-text",
-                            params: { "text-value": "Python Tutorial for Beginners", "field-name": "Video Title" }
+                            params: { "text-value": "Finish quarterly report", "field-name": "Task Title" }
                         },
                         {
                             id: "enter-text",
-                            params: { "text-value": "Learn Python programming from scratch", "field-name": "Description" }
+                            params: { "text-value": "Compile metrics and finalize draft", "field-name": "Description" }
                         },
                         {
                             id: "select-option",
-                            params: { "option-value": "public", "dropdown-name": "Visibility" }
+                            params: { "option-value": "High", "dropdown-name": "Priority" }
                         },
                         {
                             id: "click-button",
-                            params: { "button-text": "Publish" }
+                            params: { "button-text": "Save" }
                         },
                         {
                             id: "verify-message",
-                            params: { "message-type": "success", "message-text": "Video published successfully" }
+                            params: { "message-type": "success", "message-text": "Task created successfully" }
                         }
                     ]
                 },
                 {
-                    id: "error-handling-upload",
-                    title: "Error Handling - Invalid File",
+                    id: "error-handling-missing-field",
+                    title: "Error Handling - Missing Field",
                     type: "error-path",
                     steps: [
                         {
                             id: "access-page",
-                            params: { page: "creator-dashboard" }
+                            params: { page: "dashboard" }
                         },
                         {
                             id: "click-button",
-                            params: { "button-text": "Upload Video" }
+                            params: { "button-text": "New Task" }
                         },
                         {
                             id: "upload-file",
-                            params: { "file-type": "TXT", "file-name": "invalid-file.txt" }
+                            params: { "file-type": "TXT", "file-name": "notes.txt" }
                         },
                         {
                             id: "verify-message",
-                            params: { "message-type": "error", "message-text": "Invalid file type. Please upload a video file." }
+                            params: { "message-type": "error", "message-text": "Title is required" }
                         }
                     ]
                 }
             ]
         },
         {
-            id: "analytics-journey",
-            title: "Analytics Journey",
-            persona: "sarah-creator",
-            story: "As a content creator, I want to analyze my video performance so that I can understand what content resonates with my audience.",
-            benefit: "This will help me create better content and grow my channel.",
+            id: "reporting-journey",
+            title: "Reporting Journey",
+            persona: "primary-user",
+            story: "As a user, I want to view my reports so that I can understand progress and outcomes.",
+            benefit: "This will help me make better decisions and prioritize work.",
             scenarios: [
                 {
-                    id: "view-analytics",
-                    title: "View Analytics Overview",
+                    id: "view-reports",
+                    title: "View Reports Overview",
                     type: "happy-path",
                     steps: [
                         {
                             id: "access-page",
-                            params: { page: "youtube-studio" }
+                            params: { page: "dashboard" }
                         },
                         {
                             id: "click-link",
-                            params: { "link-text": "Analytics" }
+                            params: { "link-text": "Reports" }
                         },
                         {
                             id: "view-list",
-                            params: { "item-type": "videos" }
+                            params: { "item-type": "reports" }
                         },
                         {
                             id: "click-link",
@@ -194,18 +194,18 @@ window.appData = {
                         },
                         {
                             id: "verify-content",
-                            params: { "expected-content": "Video performance metrics" }
+                            params: { "expected-content": "Report metrics" }
                         }
                     ]
                 },
                 {
                     id: "export-report",
-                    title: "Export Analytics Report",
+                    title: "Export Report",
                     type: "happy-path",
                     steps: [
                         {
                             id: "access-page",
-                            params: { page: "analytics" }
+                            params: { page: "dashboard" }
                         },
                         {
                             id: "apply-filter",
@@ -213,11 +213,7 @@ window.appData = {
                         },
                         {
                             id: "click-button",
-                            params: { "button-text": "Export Report" }
-                        },
-                        {
-                            id: "select-option",
-                            params: { "option-value": "PDF", "dropdown-name": "Format" }
+                            params: { "button-text": "Export" }
                         },
                         {
                             id: "click-button",
@@ -232,36 +228,36 @@ window.appData = {
             ]
         },
         {
-            id: "content-discovery-journey",
-            title: "Content Discovery Journey",
-            persona: "mike-viewer",
-            story: "As a viewer, I want to discover relevant educational content so that I can learn new skills and stay updated.",
-            benefit: "This will help me grow my knowledge and skills efficiently.",
+            id: "search-journey",
+            title: "Search Journey",
+            persona: "primary-user",
+            story: "As a user, I want to search for relevant items so that I can find what I need faster.",
+            benefit: "This will help me work more efficiently.",
             scenarios: [
                 {
-                    id: "search-content",
-                    title: "Search for Educational Content",
+                    id: "search-items",
+                    title: "Search for Items",
                     type: "happy-path",
                     steps: [
                         {
                             id: "access-page",
-                            params: { page: "creator-dashboard" }
+                            params: { page: "search" }
                         },
                         {
                             id: "search-for",
-                            params: { "search-term": "Python programming tutorial" }
+                            params: { "search-term": "Quarterly report" }
                         },
                         {
                             id: "apply-filter",
-                            params: { "filter-type": "duration", "filter-value": "10-20 minutes" }
+                            params: { "filter-type": "status", "filter-value": "Open" }
                         },
                         {
                             id: "view-list",
-                            params: { "item-type": "videos" }
+                            params: { "item-type": "results" }
                         },
                         {
                             id: "verify-count",
-                            params: { "expected-count": 15, "item-type": "relevant videos" }
+                            params: { "expected-count": 10, "item-type": "relevant items" }
                         }
                     ]
                 },
@@ -272,11 +268,11 @@ window.appData = {
                     steps: [
                         {
                             id: "access-page",
-                            params: { page: "creator-dashboard" }
+                            params: { page: "search" }
                         },
                         {
                             id: "search-for",
-                            params: { "search-term": "very specific niche topic" }
+                            params: { "search-term": "very specific item" }
                         },
                         {
                             id: "verify-message",
@@ -287,123 +283,123 @@ window.appData = {
             ]
         },
         {
-            id: "live-streaming-journey",
-            title: "Live Streaming Journey",
-            persona: "sarah-creator",
-            story: "As a content creator, I want to go live and interact with my audience in real-time so that I can build stronger connections and increase engagement.",
-            benefit: "This will help me grow my community and create more engaging content.",
+            id: "demo-flow-journey",
+            title: "Demo Flow Journey",
+            persona: "primary-user",
+            story: "As a user, I want to run through a demo flow so that I can validate a basic workflow end-to-end.",
+            benefit: "This will help me ensure the system works as intended.",
             scenarios: [
                 {
-                    id: "start-live-stream",
-            title: "Start Demo Flow",
+                    id: "start-demo-flow",
+                    title: "Start Demo Flow",
                     type: "happy-path",
                     steps: [
                         {
                             id: "access-page",
-                            params: { page: "creator-dashboard" }
+                            params: { page: "home" }
                         },
                         {
                             id: "click-button",
-                            params: { "button-text": "Go Live" }
+                            params: { "button-text": "Start" }
                         },
                         {
                             id: "enter-text",
-                            params: { "text-value": "Live Coding: Building YouTube Features", "field-name": "Stream Title" }
+                            params: { "text-value": "Demo run", "field-name": "Title" }
                         },
                         {
                             id: "enter-text",
-                            params: { "text-value": "Join me as I code live and build new features for our platform", "field-name": "Description" }
+                            params: { "text-value": "Validating key flow steps", "field-name": "Description" }
                         },
                         {
                             id: "select-option",
-                            params: { "option-value": "public", "dropdown-name": "Visibility" }
+                            params: { "option-value": "Default", "dropdown-name": "Mode" }
                         },
                         {
                             id: "click-button",
-                            params: { "button-text": "Start Streaming" }
+                            params: { "button-text": "Run" }
                         },
                         {
                             id: "verify-message",
-                            params: { "message-type": "success", "message-text": "Live stream started successfully" }
+                            params: { "message-type": "success", "message-text": "Demo flow started successfully" }
                         }
                     ]
                 },
                 {
-                    id: "interact-with-audience",
-                    title: "Interact with Live Audience",
+                    id: "review-demo-steps",
+                    title: "Review Demo Steps",
                     type: "happy-path",
                     steps: [
                         {
                             id: "access-page",
-                            params: { page: "live-stream" }
+                            params: { page: "dashboard" }
                         },
                         {
                             id: "view-list",
-                            params: { "item-type": "live comments" }
+                            params: { "item-type": "recent actions" }
                         },
                         {
                             id: "click-button",
-                            params: { "button-text": "Pin Comment" }
+                            params: { "button-text": "Mark Complete" }
                         },
                         {
                             id: "click-button",
-                            params: { "button-text": "Reply to Comment" }
+                            params: { "button-text": "Archive" }
                         },
                         {
                             id: "enter-text",
-                            params: { "text-value": "Great question! Let me show you how to implement that feature.", "field-name": "Reply" }
+                            params: { "text-value": "All steps validated", "field-name": "Notes" }
                         },
                         {
                             id: "click-button",
-                            params: { "button-text": "Send Reply" }
+                            params: { "button-text": "Save" }
                         }
                     ]
                 }
             ]
         },
         {
-            id: "collaboration-journey",
-            title: "Creator Collaboration Journey",
-            persona: "sarah-creator",
-            story: "As a content creator, I want to collaborate with other creators so that I can expand my reach and create better content together.",
-            benefit: "This will help me grow my audience and learn from other creators.",
+            id: "team-collaboration-journey",
+            title: "Team Collaboration Journey",
+            persona: "admin-user",
+            story: "As an administrator, I want to coordinate with team members so that I can ensure smooth operations.",
+            benefit: "This will help us deliver work more consistently.",
             scenarios: [
                 {
-                    id: "find-collaborators",
-                    title: "Find Collaboration Partners",
+                    id: "assign-owner",
+                    title: "Assign Owner",
                     type: "happy-path",
                     steps: [
                         {
                             id: "access-page",
-                            params: { page: "creator-dashboard" }
+                            params: { page: "dashboard" }
                         },
                         {
                             id: "click-link",
-                            params: { "link-text": "Collaborations" }
+                            params: { "link-text": "Tasks" }
                         },
                         {
                             id: "search-for",
-                            params: { "search-term": "programming tutorial creators" }
+                            params: { "search-term": "owner" }
                         },
                         {
                             id: "apply-filter",
-                            params: { "filter-type": "subscriber count", "filter-value": "10K-100K" }
+                            params: { "filter-type": "role", "filter-value": "admin" }
                         },
                         {
                             id: "view-list",
-                            params: { "item-type": "potential collaborators" }
+                            params: { "item-type": "users" }
                         },
                         {
                             id: "click-button",
-                            params: { "button-text": "Send Collaboration Request" }
+                            params: { "button-text": "Assign" }
                         },
                         {
                             id: "enter-text",
-                            params: { "text-value": "Hi! I'd love to collaborate on a programming tutorial series. Let's discuss ideas!", "field-name": "Message" }
+                            params: { "text-value": "Assigning to Sarah for follow-up", "field-name": "Note" }
                         },
                         {
                             id: "click-button",
-                            params: { "button-text": "Send Request" }
+                            params: { "button-text": "Confirm" }
                         }
                     ]
                 }
