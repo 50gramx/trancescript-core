@@ -392,7 +392,11 @@ function renderWorkspace() {
           action,
           benefit,
           scenarios: [
-            { name: 'Scenario 1', scenarioText: `<h3>Scenario 1</h3><p><strong>Given</strong> ...<br><strong>When</strong> ...<br><strong>Then</strong> ...</p>` }
+            { name: 'Scenario 1', steps: [
+              { id: 'access-page', params: { page: 'dashboard' } },
+              { id: 'enter-text', params: { 'text-value': 'Initial note', 'field-name': 'Notes' } },
+              { id: 'verify-message', params: { 'message-type': 'success', 'message-text': 'Saved' } }
+            ] }
           ]
         };
         journeys.push(journey);
