@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    image: trancescript-core:latest
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    environment:
+      - NGINX_ENTRYPOINT_QUIET_LOGS=1
