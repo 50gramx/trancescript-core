@@ -1,6 +1,6 @@
-# YouTube Prototype - User Journey Builder
+# TranceScript Core — Open Source Journey Builder
 
-A comprehensive user journey and scenario builder for YouTube application prototyping with advanced features and visual enhancements.
+A lightweight, offline-first user journey and scenario builder. TranceScript Core ships with a generic sample app data set, runs on GitHub Pages, and optionally reports anonymous community metrics with explicit user consent.
 
 ## 🚀 Features
 
@@ -43,9 +43,8 @@ A comprehensive user journey and scenario builder for YouTube application protot
 ## 🛠️ Usage
 
 ### Getting Started
-1. Open `prototyper-youtube.html` in a web browser
-2. Use a local HTTP server (e.g., `python3 -m http.server 8000`)
-3. Start building your YouTube user journeys
+1. Open `index.html` in a web browser (or serve locally with `python3 -m http.server 8000`)
+2. Build your journeys and scenarios using the sample data in `data.js`
 
 ### Creating Scenarios
 1. **Add New Scenario**
@@ -155,32 +154,19 @@ A comprehensive user journey and scenario builder for YouTube application protot
 
 ## 🧪 Testing
 
-The application includes a comprehensive test suite that validates:
-- Data structure integrity
-- Step library functionality
-- Scenario creation and validation
-- Import/export operations
-- UI components and color coding
-- Performance optimizations
-
-Tests run automatically when the page loads and results are displayed in the console.
+This repository does not ship a runtime test harness. Development tests should be run locally and are not included in the production build.
 
 ## 🔧 Technical Details
 
 ### File Structure
 ```
-mockup_prototyper/
-├── prototyper-youtube.html    # Main HTML file
+trancescript-core/
+├── index.html                 # Main HTML file
 ├── styles.css                 # All CSS styles
 ├── app.js                     # Main JavaScript logic
-├── data.js                    # Application data
-├── test-suite.js             # Test suite
-├── ui/tabs/                   # Tab modules
-│   ├── general.js
-│   ├── profiles.js
-│   ├── personas.js
-│   ├── controls.js
-│   └── stepLibrary.js
+├── data.js                    # Sample application data
+├── firebase-config.js         # Optional metrics bootstrap (no secrets committed)
+├── ui/                        # UI modules (if used by app.js)
 └── README.md                  # This documentation
 ```
 
@@ -232,7 +218,9 @@ mockup_prototyper/
 
 ## 📝 License
 
-This project is part of the Ethosverse development toolkit.
+Copyright 2024 TranceScript contributors
+
+Licensed under the Apache License, Version 2.0. See `LICENSE` for details.
 
 ## 🤝 Contributing
 
@@ -240,4 +228,4 @@ For questions or contributions, please refer to the project documentation and co
 
 ---
 
-**Built with ❤️ for YouTube application prototyping** 
+**Built with ❤️ by the TranceScript community**
