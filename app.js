@@ -31,7 +31,9 @@ let selectedJourney = null; // index in journeys, or null
 let selectedScenario = 0;
 let selectedPersona = null; // index in personas, or null
 let editingAppDetails = false;
-let editingScenario = null; // { journeyIdx, scenarioIdx, steps: [...copy] }
+// Use window.editingScenario as the single source of truth across modules
+// scenarioEditor.js sets/reads window.editingScenario
+// Here we avoid a separate module-scoped variable to prevent desync
 
 // Helper to reset all selection state to default (no persona, journey, or app details selected)
 function resetSelection() {
@@ -555,7 +557,7 @@ function renderWorkspace() {
     // Render scenario text
     const scenarioTextDiv = document.createElement('div');
     scenarioTextDiv.className = 'scenario-text';
-    if (editingScenario && editingScenario.journeyIdx === selectedJourney && editingScenario.scenarioIdx === selectedScenario) {
+    if (window.editingScenario && window.editingScenario.journeyIdx === selectedJourney && window.editingScenario.scenarioIdx === selectedScenario) {
       scenarioTextDiv.appendChild(renderScenarioEditor(selectedJourney, selectedScenario));
     } else if (journey.scenarios[selectedScenario]) {
               scenarioTextDiv.innerHTML = renderScenarioSteps(journey.scenarios[selectedScenario]);
@@ -570,7 +572,7 @@ function renderWorkspace() {
         }
         // Fallback if module not loaded
         const steps = (journey.scenarios[selectedScenario].steps || []).map(s => ({ id: s.id, params: { ...s.params } }));
-        editingScenario = { journeyIdx: selectedJourney, scenarioIdx: selectedScenario, steps };
+        window.editingScenario = { journeyIdx: selectedJourney, scenarioIdx: selectedScenario, steps };
         renderAll();
       };
       scenarioTextDiv.appendChild(editBtn);
@@ -1058,9 +1060,11 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
   saveBtn.className = 'save-btn';
   saveBtn.onclick = () => {
     // Save the scenario steps
-    journey.scenarios[scenarioIdx].steps = editingScenario.steps;
+    if (window.editingScenario) {
+      journey.scenarios[scenarioIdx].steps = window.editingScenario.steps;
+    }
     saveToLocalStorage();
-    editingScenario = null;
+    window.editingScenario = null;
     renderAll();
     showAppDataFeedback('Scenario saved successfully!');
   };
@@ -1078,7 +1082,7 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
   cancelBtn.className = 'cancel-btn';
   cancelBtn.style.marginRight = '10px';
   cancelBtn.onclick = () => {
-    editingScenario = null;
+    window.editingScenario = null;
     renderAll();
   };
   
@@ -1095,7 +1099,7 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
   stepListDiv.className = 'step-list';
   stepListDiv.style.marginBottom = '20px';
   
-  editingScenario.steps.forEach((step, stepIdx) => {
+  (window.editingScenario?.steps || []).forEach((step, stepIdx) => {
     const stepDiv = document.createElement('div');
     stepDiv.className = 'step-item';
     
@@ -1135,24 +1139,24 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
       moveUpBtn.style.padding = '4px 8px';
       moveUpBtn.style.fontSize = '12px';
       moveUpBtn.onclick = () => {
-        const temp = editingScenario.steps[stepIdx];
-        editingScenario.steps[stepIdx] = editingScenario.steps[stepIdx - 1];
-        editingScenario.steps[stepIdx - 1] = temp;
+        const temp = window.editingScenario.steps[stepIdx];
+        window.editingScenario.steps[stepIdx] = window.editingScenario.steps[stepIdx - 1];
+        window.editingScenario.steps[stepIdx - 1] = temp;
         renderAll();
       };
       stepActions.appendChild(moveUpBtn);
     }
     
     // Move Down Button
-    if (stepIdx < editingScenario.steps.length - 1) {
+      if (stepIdx < window.editingScenario.steps.length - 1) {
       const moveDownBtn = document.createElement('button');
       moveDownBtn.textContent = '↓';
       moveDownBtn.style.padding = '4px 8px';
       moveDownBtn.style.fontSize = '12px';
-      moveDownBtn.onclick = () => {
-        const temp = editingScenario.steps[stepIdx];
-        editingScenario.steps[stepIdx] = editingScenario.steps[stepIdx + 1];
-        editingScenario.steps[stepIdx + 1] = temp;
+        moveDownBtn.onclick = () => {
+          const temp = window.editingScenario.steps[stepIdx];
+          window.editingScenario.steps[stepIdx] = window.editingScenario.steps[stepIdx + 1];
+          window.editingScenario.steps[stepIdx + 1] = temp;
         renderAll();
       };
       stepActions.appendChild(moveDownBtn);
@@ -1168,7 +1172,7 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
     deleteBtn.style.border = 'none';
     deleteBtn.style.borderRadius = '4px';
     deleteBtn.onclick = () => {
-      editingScenario.steps.splice(stepIdx, 1);
+      window.editingScenario.steps.splice(stepIdx, 1);
       renderAll();
     };
     stepActions.appendChild(deleteBtn);
@@ -1188,6 +1192,7 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
     stepLabel.style.fontWeight = '500';
     
     const stepSelect = document.createElement('select');
+  stepSelect.name = `step-type-${stepIdx}`;
     stepSelect.style.width = '100%';
     stepSelect.style.padding = '8px';
     stepSelect.style.border = '1px solid var(--color-card-border)';
@@ -1251,6 +1256,7 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
         if (param.type === 'page') {
           // Page dropdown
           paramInput = document.createElement('select');
+          paramInput.name = `${param.name}`;
           paramInput.style.width = '100%';
           paramInput.style.padding = '6px';
           paramInput.style.border = '1px solid var(--color-card-border)';
@@ -1272,6 +1278,7 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
           // Text input
           paramInput = document.createElement('input');
           paramInput.type = 'text';
+          paramInput.name = `${param.name}`;
           paramInput.value = step.params[param.name] || '';
           paramInput.placeholder = param.description || param.name;
           paramInput.style.width = '100%';
@@ -1284,6 +1291,7 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
           // Number input
           paramInput = document.createElement('input');
           paramInput.type = 'number';
+          paramInput.name = `${param.name}`;
           paramInput.value = step.params[param.name] || '';
           paramInput.placeholder = param.description || param.name;
           paramInput.style.width = '100%';
@@ -1296,6 +1304,7 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
           // Boolean checkbox
           paramInput = document.createElement('input');
           paramInput.type = 'checkbox';
+          paramInput.name = `${param.name}`;
           paramInput.checked = step.params[param.name] || false;
           paramInput.style.marginLeft = '0';
         }
@@ -1383,7 +1392,10 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
       id: 'access-home',
       params: { page: 'Home' }
     };
-    editingScenario.steps.push(newStep);
+    if (!window.editingScenario) {
+      window.editingScenario = { journeyIdx, scenarioIdx, steps: [] };
+    }
+    window.editingScenario.steps.push(newStep);
     renderAll();
   };
   
@@ -1397,7 +1409,7 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
   
   const livePreviewDiv = document.createElement('div');
   livePreviewDiv.className = 'scenario-text';
-  livePreviewDiv.innerHTML = renderScenarioSteps(editingScenario);
+  livePreviewDiv.innerHTML = renderScenarioSteps(window.editingScenario || scenario);
   
   editorContainer.appendChild(previewHeader);
   editorContainer.appendChild(livePreviewDiv);
@@ -1548,18 +1560,18 @@ function duplicateScenario(journeyIdx, scenarioIdx) {
 }
 
 function addStepDependency(stepIdx, dependencyStepIdx, condition) {
-  if (!editingScenario.steps[stepIdx].dependencies) {
-    editingScenario.steps[stepIdx].dependencies = [];
+  if (!window.editingScenario.steps[stepIdx].dependencies) {
+    window.editingScenario.steps[stepIdx].dependencies = [];
   }
   
-  editingScenario.steps[stepIdx].dependencies.push({
+  window.editingScenario.steps[stepIdx].dependencies.push({
     stepId: dependencyStepIdx,
     condition: condition
   });
 }
 
 function renderStepDependencies(stepIdx) {
-  const step = editingScenario.steps[stepIdx];
+  const step = window.editingScenario.steps[stepIdx];
   const dependenciesDiv = document.createElement('div');
   dependenciesDiv.style.marginTop = '10px';
   dependenciesDiv.style.padding = '10px';
@@ -1652,7 +1664,7 @@ function showAddDependencyModal(stepIdx) {
     <form id="addDependencyForm">
       <label for="dependencyStep">Dependent Step:</label>
       <select id="dependencyStep" required>
-        ${editingScenario.steps.map((step, idx) => 
+        ${window.editingScenario.steps.map((step, idx) => 
           `<option value="${idx}">Step ${idx + 1}: ${stepLibrary.find(s => s.id === step.id)?.label || step.id}</option>`
         ).join('')}
       </select>
@@ -1687,7 +1699,7 @@ function showAddDependencyModal(stepIdx) {
 }
 
 function renderStepComments(stepIdx) {
-  const step = editingScenario.steps[stepIdx];
+  const step = window.editingScenario.steps[stepIdx];
   const commentsDiv = document.createElement('div');
   commentsDiv.style.marginTop = '10px';
   
@@ -1699,6 +1711,7 @@ function renderStepComments(stepIdx) {
   commentsDiv.appendChild(title);
   
   const commentTextarea = document.createElement('textarea');
+  commentTextarea.name = `step-notes-${stepIdx}`;
   commentTextarea.value = step.comments || '';
   commentTextarea.placeholder = 'Add notes, comments, or documentation for this step...';
   commentTextarea.style.cssText = `
@@ -2313,9 +2326,9 @@ function setupEnhancedKeyboardShortcuts() {
     // Cmd/Ctrl + S: Save current scenario
     if ((e.metaKey || e.ctrlKey) && e.key === 's') {
       e.preventDefault();
-      if (editingScenario) {
-        const journey = journeys[editingScenario.journeyIdx];
-        journey.scenarios[editingScenario.scenarioIdx].steps = editingScenario.steps;
+      if (window.editingScenario) {
+        const journey = journeys[window.editingScenario.journeyIdx];
+        journey.scenarios[window.editingScenario.scenarioIdx].steps = window.editingScenario.steps;
         saveToLocalStorage();
         showAppDataFeedback('Scenario saved! (Ctrl+S)', false);
       }
@@ -2336,12 +2349,12 @@ function setupEnhancedKeyboardShortcuts() {
     }
     
     // Escape: Cancel editing
-    if (e.key === 'Escape') {
-      if (editingScenario) {
-        editingScenario = null;
-        renderAll();
-        showAppDataFeedback('Editing cancelled', false);
-      }
+      if (e.key === 'Escape') {
+        if (window.editingScenario) {
+          window.editingScenario = null;
+          renderAll();
+          showAppDataFeedback('Editing cancelled', false);
+        }
     }
   });
 }
