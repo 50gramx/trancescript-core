@@ -1,7 +1,21 @@
 // validators.js - Core validation and migration helpers
 
+// Defer data access until functions are called
+function getJourneysData() {
+  if (typeof window.journeys === 'undefined' || !window.journeys) {
+    console.warn('Journeys data not yet available for validation');
+    return null;
+  }
+  return window.journeys;
+}
+
 export function ensureScenarioHasSteps(journeyIdx, scenarioIdx) {
-  const journeys = window.journeys;
+  const journeys = getJourneysData();
+  if (!journeys) {
+    console.warn('Cannot ensure scenario has steps: journeys data not available');
+    return;
+  }
+  
   if (!Array.isArray(journeys)) return;
   const journey = journeys[journeyIdx];
   if (!journey || !Array.isArray(journey.scenarios)) return;
@@ -17,13 +31,19 @@ export function ensureScenarioHasSteps(journeyIdx, scenarioIdx) {
 }
 
 export function validateAppData(appData) {
+  const journeys = getJourneysData();
+  if (!journeys) {
+    console.warn('Cannot validate app data: journeys data not available');
+    return { ok: false, errors: ['Journeys data not yet available'], fixes: [] };
+  }
+  
   const errors = [];
   const fixes = [];
   if (!appData || typeof appData !== 'object') {
     errors.push('window.appData missing');
     return { ok: false, errors, fixes };
   }
-  const { appDetails, userProfiles, personas, journeys } = appData;
+  const { appDetails, userProfiles, personas } = appData;
   if (!appDetails) errors.push('appDetails missing');
   if (!Array.isArray(appDetails?.pages)) errors.push('appDetails.pages missing');
   if (!Array.isArray(appDetails?.appVariables)) errors.push('appDetails.appVariables missing');
