@@ -2186,25 +2186,7 @@ function cleanupUnusedData() {
   }
 }
 
-// Optimized validation with caching
-function validateScenarioWithCache(scenario) {
-  const cacheKey = JSON.stringify(scenario);
-  
-  if (window.scenarioValidationCache && 
-      window.scenarioValidationCache.key === cacheKey) {
-    return window.scenarioValidationCache.result;
-  }
-  
-  const result = validateScenario(scenario);
-  
-  window.scenarioValidationCache = {
-    key: cacheKey,
-    result: result,
-    timestamp: Date.now()
-  };
-  
-  return result;
-}
+// validateScenarioWithCache moved to core/validators.js
 
 // Initialize extracted modules
 setupEnhancedKeyboardShortcuts({
@@ -2402,23 +2384,7 @@ window.validateScenario = function(scenario) {
   return { valid: errors.length === 0, errors };
 };
 
-// Make validateScenarioWithCache available globally for tests
-window.validateScenarioWithCache = function(scenario) {
-  // Simple cache implementation for testing
-  const cacheKey = JSON.stringify(scenario);
-  if (window.validationCache && window.validationCache[cacheKey]) {
-    return window.validationCache[cacheKey];
-  }
-  
-  const result = validateScenario(scenario);
-  
-  if (!window.validationCache) {
-    window.validationCache = {};
-  }
-  window.validationCache[cacheKey] = result;
-  
-  return result;
-};
+// validateScenarioWithCache now provided by core/validators.js
 
 // Debounced render function for performance testing
 window.debouncedRender = function(func, delay = 300) {
