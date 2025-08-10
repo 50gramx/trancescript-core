@@ -7,6 +7,8 @@ import { stepLibrary } from './ui/tabs/stepLibrary.js';
 import { showParameterTooltip, hideParameterTooltip, showStepTypeTooltip, hideStepTypeTooltip } from './core/tooltip.js';
 import { setupEnhancedKeyboardShortcuts } from './features/shortcuts.js';
 import { initSidebarMinimize } from './features/layout.js';
+import { addStepDependency, renderStepDependencies, showAddDependencyModal } from './features/editor/dependencies.js';
+import { renderStepComments } from './features/editor/comments.js';
 
 // Import data from data.js
 let { appDetails, userProfiles, personas, journeys } = window.appData || {};
@@ -1445,6 +1447,7 @@ function duplicateScenario(journeyIdx, scenarioIdx) {
   showAppDataFeedback('Scenario duplicated successfully!');
 }
 
+/* moved to features/editor/dependencies.js */
 function addStepDependency(stepIdx, dependencyStepIdx, condition) {
   if (!window.editingScenario.steps[stepIdx].dependencies) {
     window.editingScenario.steps[stepIdx].dependencies = [];
@@ -1456,6 +1459,7 @@ function addStepDependency(stepIdx, dependencyStepIdx, condition) {
   });
 }
 
+/* moved to features/editor/dependencies.js */
 function renderStepDependencies(stepIdx) {
   const step = window.editingScenario.steps[stepIdx];
   const dependenciesDiv = document.createElement('div');
@@ -1534,6 +1538,7 @@ function renderStepDependencies(stepIdx) {
   return dependenciesDiv;
 }
 
+/* moved to features/editor/dependencies.js */
 function showAddDependencyModal(stepIdx) {
   const modalBg = document.createElement('div');
   modalBg.className = 'modal-bg';
@@ -1584,6 +1589,7 @@ function showAddDependencyModal(stepIdx) {
   document.body.appendChild(modalBg);
 }
 
+/* moved to features/editor/comments.js */
 function renderStepComments(stepIdx) {
   const step = window.editingScenario.steps[stepIdx];
   const commentsDiv = document.createElement('div');
