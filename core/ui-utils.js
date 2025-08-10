@@ -1,21 +1,24 @@
 export function getStepTypeColor(stepType) {
+  const key = String(stepType || '').toLowerCase();
   const colors = {
-    'Given': '#10b981',
-    'When': '#3b82f6',
-    'Then': '#f59e0b',
-    'And': '#8b5cf6',
-    'But': '#ef4444'
+    given: '#10b981',
+    when: '#3b82f6',
+    then: '#f59e0b',
+    and: '#8b5cf6',
+    but: '#ef4444'
   };
-  return colors[stepType] || '#6b7280';
+  return colors[key] || '#6b7280';
 }
 
 export function getParameterColor(paramType) {
+  const key = String(paramType || '').toLowerCase();
   const colors = {
-    'page': '#10b981',
-    'string': '#f59e0b',
-    'number': '#8b5cf6',
-    'boolean': '#ef4444'
+    page: '#10b981',
+    string: '#f59e0b',
+    number: '#8b5cf6',
+    boolean: '#ef4444',
+    variable: '#3b82f6'
   };
-  return colors[paramType] || '#6b7280';
+  return colors[key] || '#6b7280';
 }
 

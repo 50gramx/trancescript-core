@@ -1,3 +1,6 @@
+// Import module utilities
+import { getStepTypeColor, getParameterColor } from './core/ui-utils.js';
+
 // Import data from data.js
 let { appDetails, userProfiles, personas, journeys } = window.appData || {};
 
