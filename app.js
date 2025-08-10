@@ -2487,28 +2487,7 @@ function initializeEnhancedFeatures() {
   };
 }
 
-// Helper functions for step rendering
-function getStepTypeColor(stepType) {
-  const colors = {
-    'given': '#10b981',
-    'when': '#3b82f6', 
-    'then': '#f59e0b',
-    'and': '#8b5cf6',
-    'but': '#ef4444'
-  };
-  return colors[stepType] || '#e94f37';
-}
-
-function getParameterColor(paramType) {
-  const colors = {
-    'page': 'rgba(16, 185, 129, 0.1)',
-    'string': 'rgba(245, 158, 11, 0.1)',
-    'number': 'rgba(139, 92, 246, 0.1)',
-    'boolean': 'rgba(239, 68, 68, 0.1)',
-    'variable': 'rgba(59, 130, 246, 0.1)'
-  };
-  return colors[paramType] || 'rgba(59, 130, 246, 0.1)';
-}
+// Helper functions for step rendering moved to core/ui-utils.js
 
 function getParameterTextColor(paramType) {
   const colors = {
