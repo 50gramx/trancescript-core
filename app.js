@@ -1016,7 +1016,7 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
     }
     
     stepDiv.appendChild(previewDiv);
-    stepListDiv.appendChild(stepDiv);
+    stepListDiv.appendChild(renderStepListItem(step, stepIdx, appDetails, renderAll));
   });
   
   editorContainer.appendChild(stepListDiv);
