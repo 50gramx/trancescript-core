@@ -22,3 +22,15 @@ export function getParameterColor(paramType) {
   return colors[key] || '#6b7280';
 }
 
+export function getParameterTextColor(paramType) {
+  const key = String(paramType || '').toLowerCase();
+  const colors = {
+    page: '#064e3b',
+    string: '#7c2d12',
+    number: '#3b0764',
+    boolean: '#7f1d1d',
+    variable: '#0b3b82'
+  };
+  return colors[key] || '#111827';
+}
+
