@@ -4,6 +4,7 @@ import { saveToLocalStorage as coreSaveToLocal, loadFromLocalStorage as coreLoad
 import { renderScenarioSteps as coreRenderScenarioSteps } from './features/renderScenarioSteps.js';
 import { ensureScenarioHasSteps } from './core/validators.js';
 import { stepLibrary } from './ui/tabs/stepLibrary.js';
+import { showParameterTooltip, hideParameterTooltip, showStepTypeTooltip, hideStepTypeTooltip } from './core/tooltip.js';
 
 // Import data from data.js
 let { appDetails, userProfiles, personas, journeys } = window.appData || {};
@@ -2388,101 +2389,10 @@ function getParameterTextColor(paramType) {
 }
 
 // Global tooltip functions
-window.showParameterTooltip = function(event, element) {
-  const tooltipContent = decodeURIComponent(element.getAttribute('data-tooltip'));
-  
-  // Remove existing tooltip
-  const existingTooltip = document.querySelector('.parameter-tooltip-popup');
-  if (existingTooltip) {
-    existingTooltip.remove();
-  }
-  
-  // Create tooltip
-  const tooltip = document.createElement('div');
-  tooltip.className = 'parameter-tooltip-popup';
-  tooltip.innerHTML = tooltipContent;
-  
-  // Position tooltip
-  const rect = element.getBoundingClientRect();
-  tooltip.style.position = 'fixed';
-  tooltip.style.left = rect.left + 'px';
-  tooltip.style.top = (rect.bottom + 8) + 'px';
-  tooltip.style.zIndex = '99999';
-  tooltip.style.pointerEvents = 'none';
-  
-  document.body.appendChild(tooltip);
-  
-  // Adjust position if tooltip goes off screen
-  setTimeout(() => {
-    const tooltipRect = tooltip.getBoundingClientRect();
-    if (tooltipRect.right > window.innerWidth) {
-      tooltip.style.left = (window.innerWidth - tooltipRect.width - 10) + 'px';
-    }
-    if (tooltipRect.bottom > window.innerHeight) {
-      tooltip.style.top = (rect.top - tooltipRect.height - 8) + 'px';
-    }
-  }, 0);
-};
-
-window.hideParameterTooltip = function() {
-  const tooltip = document.querySelector('.parameter-tooltip-popup');
-  if (tooltip) {
-    tooltip.remove();
-  }
-};
-
-window.showStepTypeTooltip = function(event, element) {
-  const stepId = element.getAttribute('data-step-id');
-  const stepCategory = element.getAttribute('data-step-category');
-  const stepDescription = element.getAttribute('data-step-description');
-  
-  // Remove existing tooltip
-  const existingTooltip = document.querySelector('.step-type-tooltip-popup');
-  if (existingTooltip) {
-    existingTooltip.remove();
-  }
-  
-  // Create tooltip
-  const tooltip = document.createElement('div');
-  tooltip.className = 'step-type-tooltip-popup';
-  tooltip.innerHTML = `
-    <div class="tooltip-content">
-      <div class="tooltip-header">🔧 Step: ${stepId}</div>
-      <div class="tooltip-details">
-        <div><strong>Type:</strong> ${element.textContent}</div>
-        <div><strong>Category:</strong> ${stepCategory}</div>
-        <div><strong>Description:</strong> ${stepDescription}</div>
-      </div>
-    </div>
-  `;
-  
-  // Position tooltip
-  const rect = element.getBoundingClientRect();
-  tooltip.style.position = 'fixed';
-  tooltip.style.left = rect.left + 'px';
-  tooltip.style.top = (rect.bottom + 8) + 'px';
-  tooltip.style.zIndex = '10000';
-  
-  document.body.appendChild(tooltip);
-  
-  // Adjust position if tooltip goes off screen
-  setTimeout(() => {
-    const tooltipRect = tooltip.getBoundingClientRect();
-    if (tooltipRect.right > window.innerWidth) {
-      tooltip.style.left = (window.innerWidth - tooltipRect.width - 10) + 'px';
-    }
-    if (tooltipRect.bottom > window.innerHeight) {
-      tooltip.style.top = (rect.top - tooltipRect.height - 8) + 'px';
-    }
-  }, 0);
-};
-
-window.hideStepTypeTooltip = function() {
-  const tooltip = document.querySelector('.step-type-tooltip-popup');
-  if (tooltip) {
-    tooltip.remove();
-  }
-};
+window.showParameterTooltip = (e, el) => showParameterTooltip(e, el);
+window.hideParameterTooltip = () => hideParameterTooltip();
+window.showStepTypeTooltip = (e, el) => showStepTypeTooltip(e, el);
+window.hideStepTypeTooltip = () => hideStepTypeTooltip();
 
 // Make stepLibrary available globally for tests
 window.stepLibrary = stepLibrary;
