@@ -5,33 +5,79 @@ import { ensureScenarioHasSteps } from '../core/validators.js';
 
 // Defer data access until functions are called
 function getJourneysData() {
-  if (typeof window.journeys === 'undefined' || !window.journeys) {
-    console.warn('Journeys data not yet available');
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined') {
+    console.warn('Not in browser environment');
     return null;
   }
-  return window.journeys;
+  
+  // Check if appData exists and has journeys
+  if (typeof window.appData === 'undefined' || !window.appData) {
+    console.warn('appData not yet available');
+    return null;
+  }
+  
+  if (!window.appData.journeys) {
+    console.warn('Journeys data not yet available in appData');
+    return null;
+  }
+  
+  // Validate that journeys is an array
+  if (!Array.isArray(window.appData.journeys)) {
+    console.error('Journeys data is not an array:', typeof window.appData.journeys);
+    return null;
+  }
+  
+  return window.appData.journeys;
 }
 
 // Enhanced scenario editing with validation and auto-save
 export function enterScenarioEdit(journeyIdx, scenarioIdx) {
+  console.log('enterScenarioEdit called with:', { journeyIdx, scenarioIdx });
+  
   const journeys = getJourneysData();
   if (!journeys) {
     console.error('Cannot enter scenario edit mode: journeys data not available');
+    console.log('Available data:', {
+      hasWindow: typeof window !== 'undefined',
+      hasAppData: typeof window.appData !== 'undefined',
+      appDataKeys: window.appData ? Object.keys(window.appData) : 'N/A',
+      hasJourneys: window.appData?.journeys ? 'Yes' : 'No'
+    });
     return;
   }
 
+  console.log('Journeys data found:', {
+    journeysLength: journeys.length,
+    journeyIdx,
+    scenarioIdx
+  });
+
   if (journeyIdx < 0 || journeyIdx >= journeys.length) {
-    console.error('Invalid journey index:', journeyIdx);
+    console.error('Invalid journey index:', journeyIdx, 'journeys length:', journeys.length);
     return;
   }
 
   const journey = journeys[journeyIdx];
+  console.log('Journey found:', {
+    journeyId: journey.id,
+    journeyTitle: journey.title,
+    hasScenarios: !!journey.scenarios,
+    scenariosLength: journey.scenarios?.length || 0
+  });
+  
   if (!journey.scenarios || scenarioIdx < 0 || scenarioIdx >= journey.scenarios.length) {
-    console.error('Invalid scenario index:', scenarioIdx);
+    console.error('Invalid scenario index:', scenarioIdx, 'scenarios length:', journey.scenarios?.length || 0);
     return;
   }
 
   const scenario = journey.scenarios[scenarioIdx];
+  
+  // Validate scenario object
+  if (!scenario || typeof scenario !== 'object') {
+    console.error('Invalid scenario object:', scenario);
+    return;
+  }
   
   // Ensure scenario has steps
   ensureScenarioHasSteps(journeyIdx, scenarioIdx);
@@ -48,8 +94,8 @@ export function enterScenarioEdit(journeyIdx, scenarioIdx) {
   window.editingScenario = {
     journeyIdx,
     scenarioIdx,
-    originalSteps: [...scenario.steps],
-    steps: [...scenario.steps]
+    originalSteps: [...(scenario.steps || [])],
+    steps: [...(scenario.steps || [])]
   };
   
   // Render the enhanced editor
@@ -58,7 +104,24 @@ export function enterScenarioEdit(journeyIdx, scenarioIdx) {
   // Initialize auto-save
   initializeAutoSave(journeyIdx, scenarioIdx);
   
-  console.log(`Entered edit mode for scenario: ${scenario.title}`);
+  // Safe logging with fallback for title
+  const scenarioTitle = scenario.title || scenario.id || `Scenario ${scenarioIdx}`;
+  console.log(`Entered edit mode for scenario: ${scenarioTitle}`);
+  
+  // Additional validation and fallback for missing title
+  if (!scenario.title && scenario.id) {
+    console.warn(`Scenario missing title, using ID as fallback: ${scenario.id}`);
+    // Optionally set a default title if missing
+    if (typeof window.saveToLocalStorage === 'function') {
+      scenario.title = scenario.id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      try {
+        window.saveToLocalStorage();
+        console.log(`Auto-generated title for scenario: ${scenario.title}`);
+      } catch (error) {
+        console.warn('Could not auto-save generated title:', error);
+      }
+    }
+  }
 }
 
 // Exit scenario edit mode

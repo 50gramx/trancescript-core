@@ -2,11 +2,30 @@
 
 // Defer data access until functions are called
 function getJourneysData() {
-  if (typeof window.journeys === 'undefined' || !window.journeys) {
-    console.warn('Journeys data not yet available for validation');
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined') {
+    console.warn('Not in browser environment');
     return null;
   }
-  return window.journeys;
+  
+  // Check if appData exists and has journeys
+  if (typeof window.appData === 'undefined' || !window.appData) {
+    console.warn('appData not yet available for validation');
+    return null;
+  }
+  
+  if (!window.appData.journeys) {
+    console.warn('Journeys data not yet available in appData for validation');
+    return null;
+  }
+  
+  // Validate that journeys is an array
+  if (!Array.isArray(window.appData.journeys)) {
+    console.error('Journeys data is not an array:', typeof window.appData.journeys);
+    return null;
+  }
+  
+  return window.appData.journeys;
 }
 
 export function ensureScenarioHasSteps(journeyIdx, scenarioIdx) {
