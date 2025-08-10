@@ -1,6 +1,7 @@
 // Import module utilities
 import { getStepTypeColor, getParameterColor } from './core/ui-utils.js';
 import { ensureScenarioHasSteps } from './core/validators.js';
+import { stepLibrary } from './ui/tabs/stepLibrary.js';
 
 // Import data from data.js
 let { appDetails, userProfiles, personas, journeys } = window.appData || {};
@@ -1935,7 +1936,6 @@ import { renderControlsTab } from './ui/tabs/controls.js';
 import { renderStepLibraryTab } from './ui/tabs/stepLibraryTab.js';
 import { renderPagesTab } from './ui/tabs/general.js';
 import { renderAppVariablesTab } from './ui/tabs/general.js';
-import { stepLibrary } from './ui/tabs/stepLibrary.js';
 
 // --- On page load, try to restore from localStorage ---
 if (loadFromLocalStorage()) {
