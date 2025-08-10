@@ -1,5 +1,6 @@
 // Import module utilities
 import { getStepTypeColor, getParameterColor } from './core/ui-utils.js';
+import { ensureScenarioHasSteps } from './core/validators.js';
 
 // Import data from data.js
 let { appDetails, userProfiles, personas, journeys } = window.appData || {};
@@ -770,20 +771,7 @@ function renderWorkspace() {
   });
 }
 
-// Ensure a scenario has a structured steps array; migrate legacy scenarioText
-function ensureScenarioHasSteps(journeyIdx, scenarioIdx) {
-  const journey = journeys && journeys[journeyIdx];
-  if (!journey || !Array.isArray(journey.scenarios)) return;
-  const scenario = journey.scenarios[scenarioIdx];
-  if (!scenario) return;
-  if (!Array.isArray(scenario.steps)) {
-    scenario.steps = [
-      { id: 'access-page', params: { page: 'dashboard' } }
-    ];
-    if (scenario.scenarioText) delete scenario.scenarioText;
-    try { saveToLocalStorage(); } catch (_) {}
-  }
-}
+// ensureScenarioHasSteps is now imported from core/validators.js
 
 function renderScenarioSteps(scenario) {
     if (!scenario || !scenario.steps) return '';
