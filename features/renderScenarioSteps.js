@@ -1,5 +1,5 @@
 // features/renderScenarioSteps.js
-import { getStepTypeColor, getParameterColor } from '../core/ui-utils.js';
+import { getStepTypeColor, getParameterColor, getParameterTextColor } from '../core/ui-utils.js';
 
 export function renderScenarioSteps(scenario) {
   if (!scenario || !scenario.steps) return '';
@@ -41,17 +41,27 @@ export function renderScenarioSteps(scenario) {
           : paramDef?.type === 'number' ? 'number-parameter'
           : paramDef?.type === 'boolean' ? 'boolean-parameter' : 'parameter-highlight';
 
-        const highlightedParam = `<span class="${paramClass} parameter-tooltip" style="background: ${getParameterColor(paramDef?.type || 'string')};">${paramValue}</span>`;
+        const highlightedParam = `<span class=\"${paramClass} parameter-tooltip\"
+          style=\"background: ${getParameterColor(paramDef?.type || 'string')}; color: ${getParameterTextColor(paramDef?.type || 'string')}; padding: 2px 6px; border-radius: 4px; font-weight: 500; cursor: help; position: relative; display: inline-block;\"
+          data-tooltip=\"${encodeURIComponent(tooltipContent)}\"
+          onmouseenter=\"showParameterTooltip(event, this)\"
+          onmouseleave=\"hideParameterTooltip()\"
+        >${paramValue}</span>`;
         stepContent = stepContent.replace(`{${key}}`, highlightedParam);
       });
     }
 
     return `
-      <div class="step-item" style="border-left: 4px solid ${stepColor}; padding: 10px 12px; margin: 8px 0;">
-        <div class="step-content">
-          <span class="step-title">${stepDef.type}:</span>
-          <span class="step-text">${stepContent}</span>
-        </div>
+      <div class="step-item ${stepType}-step">
+        <span class="step-type-badge"
+          style="background: ${stepColor};"
+          data-step-id="${step.id}"
+          data-step-category="${stepDef.category}"
+          data-step-description="${stepDef.description || ''}"
+          onmouseenter="showStepTypeTooltip(event, this)"
+          onmouseleave="hideStepTypeTooltip()"
+        >${stepDef.type}</span>
+        <span class="step-content">${stepContent}</span>
       </div>
     `;
   }).join('');
