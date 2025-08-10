@@ -2,9 +2,11 @@
 import { getStepTypeColor, getParameterColor } from './core/ui-utils.js';
 import { saveToLocalStorage as coreSaveToLocal, loadFromLocalStorage as coreLoadFromLocal } from './core/storage.js';
 import { renderScenarioSteps as coreRenderScenarioSteps } from './features/renderScenarioSteps.js';
-import { ensureScenarioHasSteps } from './core/validators.js';
+import { ensureScenarioHasSteps, validateScenarioWithCache } from './core/validators.js';
 import { stepLibrary } from './ui/tabs/stepLibrary.js';
 import { showParameterTooltip, hideParameterTooltip, showStepTypeTooltip, hideStepTypeTooltip } from './core/tooltip.js';
+import { setupEnhancedKeyboardShortcuts } from './features/shortcuts.js';
+import { initSidebarMinimize } from './features/layout.js';
 
 // Import data from data.js
 let { appDetails, userProfiles, personas, journeys } = window.appData || {};
@@ -122,12 +124,12 @@ function saveToLocalStorage() {
 function loadFromLocalStorage() {
   const parsed = coreLoadFromLocal();
   if (parsed) {
-    appDetails = parsed.appDetails;
-    userProfiles = parsed.userProfiles;
-    personas = parsed.personas;
-    journeys = parsed.journeys;
-    return true;
-  }
+        appDetails = parsed.appDetails;
+        userProfiles = parsed.userProfiles;
+        personas = parsed.personas;
+        journeys = parsed.journeys;
+        return true;
+      }
   return false;
 }
 
@@ -1037,7 +1039,7 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
       moveDownBtn.textContent = '↓';
       moveDownBtn.style.padding = '4px 8px';
       moveDownBtn.style.fontSize = '12px';
-        moveDownBtn.onclick = () => {
+      moveDownBtn.onclick = () => {
           const temp = window.editingScenario.steps[stepIdx];
           window.editingScenario.steps[stepIdx] = window.editingScenario.steps[stepIdx + 1];
           window.editingScenario.steps[stepIdx + 1] = temp;
@@ -2204,44 +2206,18 @@ function validateScenarioWithCache(scenario) {
   return result;
 }
 
-// Enhanced keyboard shortcuts
-function setupEnhancedKeyboardShortcuts() {
-  document.addEventListener('keydown', (e) => {
-    // Cmd/Ctrl + S: Save current scenario
-    if ((e.metaKey || e.ctrlKey) && e.key === 's') {
-      e.preventDefault();
-      if (window.editingScenario) {
-        const journey = journeys[window.editingScenario.journeyIdx];
-        journey.scenarios[window.editingScenario.scenarioIdx].steps = window.editingScenario.steps;
-        saveToLocalStorage();
-        showAppDataFeedback('Scenario saved! (Ctrl+S)', false);
-      }
-    }
-    
-    // Cmd/Ctrl + D: Toggle dark mode
-    if ((e.metaKey || e.ctrlKey) && e.key === 'd') {
-      e.preventDefault();
-      toggleDarkMode();
-    }
-    
-    // Cmd/Ctrl + N: New scenario
-    if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
-      e.preventDefault();
-      if (selectedJourney !== null) {
-        showAddScenarioModal(selectedJourney);
-      }
-    }
-    
-    // Escape: Cancel editing
-      if (e.key === 'Escape') {
-        if (window.editingScenario) {
-          window.editingScenario = null;
-          renderAll();
-          showAppDataFeedback('Editing cancelled', false);
-        }
-    }
-  });
-}
+// Initialize extracted modules
+setupEnhancedKeyboardShortcuts({
+  getEditingScenario: () => window.editingScenario,
+  getJourneys: () => journeys,
+  saveToLocalStorage,
+  renderAll,
+  showAppDataFeedback,
+  toggleDarkMode,
+  showAddScenarioModal,
+  getSelectedJourney: () => selectedJourney
+});
+initSidebarMinimize(renderSidebar);
 
 // Auto-save indicator
 function showAutoSaveIndicator() {

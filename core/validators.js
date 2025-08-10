@@ -83,3 +83,18 @@ export function validateAppData(appData) {
   return { ok: errors.length === 0, errors, fixes };
 }
 
+// Optimized validation with caching
+export function validateScenarioWithCache(scenario) {
+  const cacheKey = JSON.stringify(scenario);
+  if (typeof window !== 'undefined' && window.scenarioValidationCache && window.scenarioValidationCache.key === cacheKey) {
+    return window.scenarioValidationCache.result;
+  }
+  const result = (typeof window !== 'undefined' && typeof window.validateScenario === 'function')
+    ? window.validateScenario(scenario)
+    : null;
+  if (typeof window !== 'undefined') {
+    window.scenarioValidationCache = { key: cacheKey, result, timestamp: Date.now() };
+  }
+  return result;
+}
+
