@@ -9,6 +9,8 @@ import { setupEnhancedKeyboardShortcuts } from './features/shortcuts.js';
 import { initSidebarMinimize } from './features/layout.js';
 import { addStepDependency, renderStepDependencies, showAddDependencyModal } from './features/editor/dependencies.js';
 import { renderStepComments } from './features/editor/comments.js';
+import { exportAppData as coreExportAppData, importAppData as coreImportAppData, getCurrentAppData as coreGetCurrentAppData } from './core/export-import.js';
+import { showAddScenarioModal as featureShowAddScenarioModal, addNewScenario as featureAddNewScenario } from './features/scenario/add.js';
 
 // Import data from data.js
 let { appDetails, userProfiles, personas, journeys } = window.appData || {};
@@ -110,14 +112,7 @@ function showAppDataFeedback(msg, isError = false) {
   setTimeout(() => { appDataFeedback.style.display = 'none'; }, 2600);
 }
 
-function getCurrentAppData() {
-  return {
-    appDetails,
-    userProfiles,
-    personas,
-    journeys
-  };
-}
+function getCurrentAppData() { return coreGetCurrentAppData(appDetails, userProfiles, personas, journeys); }
 
 function saveToLocalStorage() {
   coreSaveToLocal(appDetails, userProfiles, personas, journeys);
@@ -135,46 +130,9 @@ function loadFromLocalStorage() {
   return false;
 }
 
-function exportAppData() {
-  const data = getCurrentAppData();
-  const json = JSON.stringify(data, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const appName = (appDetails.name || 'App').replace(/[^a-z0-9]/gi, '_');
-  const now = new Date();
-  const pad = n => n.toString().padStart(2, '0');
-  const filename = `${appName}-${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}-${pad(now.getHours())}-${pad(now.getMinutes())}.json`;
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(() => { document.body.removeChild(a); }, 100);
-  showAppDataFeedback('App data exported!');
-}
+function exportAppData() { coreExportAppData(appDetails, userProfiles, personas, journeys, showAppDataFeedback); }
 
-function importAppData(file) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      // Basic schema validation
-      if (!data.appDetails || !data.userProfiles || !data.personas || !data.journeys) {
-        showAppDataFeedback('Invalid file format.', true);
-        return;
-      }
-      appDetails = data.appDetails;
-      userProfiles = data.userProfiles;
-      personas = data.personas;
-      journeys = data.journeys;
-      saveToLocalStorage();
-      renderAll();
-      showAppDataFeedback('App data imported!');
-    } catch (err) {
-      showAppDataFeedback('Failed to import: Invalid JSON.', true);
-    }
-  };
-  reader.readAsText(file);
-}
+function importAppData(file) { coreImportAppData(file, (data) => { appDetails = data.appDetails; userProfiles = data.userProfiles; personas = data.personas; journeys = data.journeys; saveToLocalStorage(); renderAll(); }, showAppDataFeedback); }
 
 // --- Sidebar Rendering ---
 // Renders the sidebar with app name, app key, and user story list. Handles sidebar minimize and navigation.
@@ -779,148 +737,10 @@ function renderScenarioSteps(scenario) {
 }
 
 function showAddScenarioModal(journeyIdx) {
-  // Create modal background
-  const modalBg = document.createElement('div');
-  modalBg.className = 'modal-bg';
-  modalBg.onclick = (e) => {
-    if (e.target === modalBg) {
-      document.body.removeChild(modalBg);
-    }
-  };
-
-  // Create modal content
-  const modal = document.createElement('div');
-  modal.className = 'modal';
-  modal.innerHTML = `
-    <h3>Add New Scenario</h3>
-    <form id="addScenarioForm">
-      <label for="scenarioTitle">Scenario Title *</label>
-      <input type="text" id="scenarioTitle" placeholder="Enter scenario title" required />
-      
-      <label for="scenarioDescription">Description (optional)</label>
-      <textarea id="scenarioDescription" placeholder="Describe what this scenario covers"></textarea>
-      
-      <label for="scenarioType">Scenario Type</label>
-      <select id="scenarioType">
-        <option value="happy-path">Happy Path</option>
-        <option value="error-path">Error Path</option>
-        <option value="alternative">Alternative Flow</option>
-      </select>
-      
-      <label for="scenarioTemplate">Template (optional)</label>
-      <select id="scenarioTemplate">
-        <option value="">Start from scratch</option>
-        <option value="login-flow">Login Flow</option>
-        <option value="upload-process">Upload Process</option>
-        <option value="search-flow">Search Flow</option>
-        <option value="payment-process">Payment Process</option>
-        <option value="error-handling">Error Handling</option>
-      </select>
-      
-      <div class="modal-actions">
-        <button type="button" class="cancel-btn" onclick="document.body.removeChild(this.closest('.modal-bg'))">Cancel</button>
-        <button type="submit" class="add-btn">Add Scenario</button>
-      </div>
-    </form>
-  `;
-
-  // Add form submit handler
-  modal.querySelector('#addScenarioForm').onsubmit = (e) => {
-    e.preventDefault();
-    const title = modal.querySelector('#scenarioTitle').value.trim();
-    const description = modal.querySelector('#scenarioDescription').value.trim();
-    const type = modal.querySelector('#scenarioType').value;
-    const template = modal.querySelector('#scenarioTemplate').value;
-    
-    if (!title) {
-      alert('Please enter a scenario title');
-      return;
-    }
-    
-    // Add the new scenario with template
-    addNewScenario(journeyIdx, title, description, type, template);
-    
-    // Close modal
-    document.body.removeChild(modalBg);
-  };
-
-  modalBg.appendChild(modal);
-  document.body.appendChild(modalBg);
+  featureShowAddScenarioModal(journeyIdx, (jIdx, title, description, type, template) => featureAddNewScenario(journeys[jIdx], jIdx, title, description, type, template, saveToLocalStorage, renderAll, showAppDataFeedback));
 }
 
-function addNewScenario(journeyIdx, title, description, type, template) {
-  // Track scenario creation for metrics
-  if (window.trancescriptMetrics) {
-    window.trancescriptMetrics.trackScenarioCreated();
-  }
-  const journey = journeys[journeyIdx];
-  const newScenarioId = `scenario${journey.scenarios.length + 1}`;
-  
-  // Define template steps
-  const templateSteps = {
-    'login-flow': [
-      { id: "access-home", params: { page: "Home" } },
-      { id: "click-login-button", params: { page: "Home" } },
-      { id: "enter-credentials", params: { page: "Login", username: "user@example.com", password: "password123" } },
-      { id: "submit-login", params: { page: "Login" } },
-      { id: "verify-login-success", params: { page: "Dashboard" } }
-    ],
-    'upload-process': [
-      { id: "access-upload-page", params: { page: "Upload" } },
-      { id: "select-file", params: { page: "Upload", "file-type": "document" } },
-      { id: "add-metadata", params: { page: "Upload", "metadata-type": "title-description" } },
-      { id: "set-visibility", params: { page: "Upload", visibility: "public" } },
-      { id: "publish-content", params: { page: "Upload" } }
-    ],
-    'search-flow': [
-      { id: "access-search", params: { page: "Search" } },
-      { id: "enter-search-query", params: { page: "Search", "search-term": "example query" } },
-      { id: "apply-filters", params: { page: "Search", "filter-type": "date-category" } },
-      { id: "view-results", params: { page: "Search Results" } },
-      { id: "select-result", params: { page: "Search Results" } }
-    ],
-    'payment-process': [
-      { id: "access-checkout", params: { page: "Checkout" } },
-      { id: "enter-payment-details", params: { page: "Checkout", "payment-method": "credit-card" } },
-      { id: "validate-payment", params: { page: "Checkout" } },
-      { id: "confirm-purchase", params: { page: "Checkout" } },
-      { id: "receive-confirmation", params: { page: "Confirmation" } }
-    ],
-    'error-handling': [
-      { id: "trigger-error-condition", params: { page: "Any Page" } },
-      { id: "display-error-message", params: { page: "Error Page", "error-type": "validation" } },
-      { id: "provide-error-details", params: { page: "Error Page" } },
-      { id: "suggest-solution", params: { page: "Error Page" } },
-      { id: "allow-retry", params: { page: "Error Page" } }
-    ]
-  };
-  
-  const newScenario = {
-    id: newScenarioId,
-    title: title,
-    description: description,
-    type: type,
-    steps: template && templateSteps[template] ? templateSteps[template] : [
-      // Default step if no template
-      { id: "access-home", params: { page: "Home" } }
-    ]
-  };
-  
-  journey.scenarios.push(newScenario);
-  
-  // Select the new scenario
-  selectedScenario = journey.scenarios.length - 1;
-  
-  // Save to localStorage
-  saveToLocalStorage();
-  
-  // Re-render
-  renderAll();
-  
-  // Show feedback
-  const templateText = template ? ` with ${template.replace('-', ' ')} template` : '';
-  showAppDataFeedback(`New scenario added successfully${templateText}!`);
-}
+function addNewScenario(journeyIdx, title, description, type, template) { featureAddNewScenario(journeys[journeyIdx], journeyIdx, title, description, type, template, saveToLocalStorage, renderAll, showAppDataFeedback); }
 
 function renderScenarioEditor(journeyIdx, scenarioIdx) {
   const journey = journeys[journeyIdx];
