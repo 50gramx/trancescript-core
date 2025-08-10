@@ -9,6 +9,8 @@ import { setupEnhancedKeyboardShortcuts } from './features/shortcuts.js';
 import { initSidebarMinimize } from './features/layout.js';
 import { addStepDependency, renderStepDependencies, showAddDependencyModal } from './features/editor/dependencies.js';
 import { renderStepComments } from './features/editor/comments.js';
+import { createParamInput } from './features/editor/stepParams.js';
+import { renderStepListItem } from './features/editor/stepListItem.js';
 import { exportAppData as coreExportAppData, importAppData as coreImportAppData, getCurrentAppData as coreGetCurrentAppData } from './core/export-import.js';
 import { showAddScenarioModal as featureShowAddScenarioModal, addNewScenario as featureAddNewScenario } from './features/scenario/add.js';
 
@@ -952,80 +954,12 @@ function renderScenarioEditor(journeyIdx, scenarioIdx) {
       currentStepDef.params.forEach(param => {
         const paramDiv = document.createElement('div');
         paramDiv.style.marginBottom = '8px';
-        
         const paramLabel = document.createElement('label');
         paramLabel.textContent = `${param.name}${param.required ? ' *' : ''}:`;
         paramLabel.style.display = 'block';
         paramLabel.style.marginBottom = '3px';
         paramLabel.style.fontSize = '14px';
-        
-        let paramInput;
-        
-        if (param.type === 'page') {
-          // Page dropdown
-          paramInput = document.createElement('select');
-          paramInput.name = `${param.name}`;
-          paramInput.style.width = '100%';
-          paramInput.style.padding = '6px';
-          paramInput.style.border = '1px solid var(--color-card-border)';
-          paramInput.style.borderRadius = '4px';
-          paramInput.style.background = 'var(--color-bg)';
-          paramInput.style.color = 'var(--color-text)';
-          
-          // Add page options
-          appDetails.pages.forEach(page => {
-            const option = document.createElement('option');
-            option.value = page.name;
-            option.textContent = page.name;
-            if (step.params[param.name] === page.name) {
-              option.selected = true;
-            }
-            paramInput.appendChild(option);
-          });
-        } else if (param.type === 'string') {
-          // Text input
-          paramInput = document.createElement('input');
-          paramInput.type = 'text';
-          paramInput.name = `${param.name}`;
-          paramInput.value = step.params[param.name] || '';
-          paramInput.placeholder = param.description || param.name;
-          paramInput.style.width = '100%';
-          paramInput.style.padding = '6px';
-          paramInput.style.border = '1px solid var(--color-card-border)';
-          paramInput.style.borderRadius = '4px';
-          paramInput.style.background = 'var(--color-bg)';
-          paramInput.style.color = 'var(--color-text)';
-        } else if (param.type === 'number') {
-          // Number input
-          paramInput = document.createElement('input');
-          paramInput.type = 'number';
-          paramInput.name = `${param.name}`;
-          paramInput.value = step.params[param.name] || '';
-          paramInput.placeholder = param.description || param.name;
-          paramInput.style.width = '100%';
-          paramInput.style.padding = '6px';
-          paramInput.style.border = '1px solid var(--color-card-border)';
-          paramInput.style.borderRadius = '4px';
-          paramInput.style.background = 'var(--color-bg)';
-          paramInput.style.color = 'var(--color-text)';
-        } else if (param.type === 'bool') {
-          // Boolean checkbox
-          paramInput = document.createElement('input');
-          paramInput.type = 'checkbox';
-          paramInput.name = `${param.name}`;
-          paramInput.checked = step.params[param.name] || false;
-          paramInput.style.marginLeft = '0';
-        }
-        
-        // Add change handler
-        paramInput.onchange = () => {
-          if (param.type === 'bool') {
-            step.params[param.name] = paramInput.checked;
-          } else {
-            step.params[param.name] = paramInput.value;
-          }
-        };
-        
+        const paramInput = createParamInput(param, step, appDetails);
         paramDiv.appendChild(paramLabel);
         paramDiv.appendChild(paramInput);
         paramsDiv.appendChild(paramDiv);
